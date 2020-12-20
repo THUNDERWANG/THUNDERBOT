@@ -6,10 +6,10 @@ module.exports = {
             const rolesCache = await message.guild.roles.cache;
             // Remove any existing members in the onlineOnly role
             const onlineMembers = await rolesCache.get(onlineOnlyID).members;
-            onlineMembers.forEach(member => member.roles.remove(onlineOnlyID));
+            await onlineMembers.forEach(member => member.roles.remove(onlineOnlyID));
             // Add members to onlineOnly role, ping them, remove them from the role
             const roleMembers = await rolesCache.get(roleID).members;
-            roleMembers.forEach(member => { if (member.presence.status === 'online') member.roles.add(onlineOnlyID); });
+            await roleMembers.forEach(member => { if (member.presence.status === 'online') member.roles.add(onlineOnlyID); });
             await message.channel.send(`${rolesCache.get(onlineOnlyID)}`);
             await roleMembers.forEach(member => member.roles.remove(onlineOnlyID)); 
         } catch (error) {

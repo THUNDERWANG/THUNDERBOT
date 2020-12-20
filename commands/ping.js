@@ -1,11 +1,14 @@
 module.exports = {
     name: 'ping',
     description: 'test',
-    async execute(message, args) {
-        message.channel.send('Pong');
-        message.guild.members.cache.forEach(member => {
-            if (!member.user.bot) console.log(member.user.username)   
-        });
+    async execute(message, args, client) {
+        try {
+            const reply = await message.reply('Calculating ping...')
+            const ping = await reply.createdTimeStamp - message.createdTimeStamp
+            await message.reply(`Pong 🏓! Bot latency: ${ping}; API latency: ${client.ws.ping}`)
+        } catch (error) {
+            console.error(error)
+        };
     }
 };
 
