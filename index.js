@@ -31,4 +31,4 @@ client.on('message', message => {
 });
 
 
-client.login(process.env('THUNDERBOT_TOKEN'));
+client.login(process.env.THUNDERBOT_TOKEN);
