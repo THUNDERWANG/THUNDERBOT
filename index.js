@@ -21,7 +21,7 @@ client.on('message', message => {
     
     switch (command) {
         case 'ping':
-            client.commands.get('ping').execute(message, args);
+            client.commands.get('ping').execute(message, args, client);
             break;
         
         case 'call':
@@ -29,6 +29,5 @@ client.on('message', message => {
             break;      
     };
 });
-
 
 client.login(process.env.THUNDERBOT_TOKEN);

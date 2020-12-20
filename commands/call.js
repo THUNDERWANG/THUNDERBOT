@@ -1,23 +1,34 @@
 module.exports = {
     name: 'call',
     description: 'clears a temp role, adds online-only users to a temp role, pings role',
-    async pingRole(roleID, onlineOnlyID, message) {
+    async execute(message, args, client) {
+       // Maybe check to see if folks are in the temp pingable role and remove them first?
+
+        function findRoleID(name, rolesCache) {
+            let roleID;
+            for (let [key, value] of rolesCache) {
+                if (value.name.toLowerCase() === name.toLowerCase()) {
+                    roleID = key;
+                };
+            };
+            return roleID;
+        };
+
         try {
             const rolesCache = await message.guild.roles.cache;
-            // Remove any existing members in the onlineOnly role
-            const onlineMembers = await rolesCache.get(onlineOnlyID).members;
-            await onlineMembers.forEach(member => member.roles.remove(onlineOnlyID));
-            // Add members to onlineOnly role, ping them, remove them from the role
+
+            const roleID = findRoleID(args[0], rolesCache); 
+            const tempRoleID = findRoleID('Xmage Online', rolesCache);
+
             const roleMembers = await rolesCache.get(roleID).members;
-            await roleMembers.forEach(member => { if (member.presence.status === 'online') member.roles.add(onlineOnlyID); });
-            await message.channel.send(`${rolesCache.get(onlineOnlyID)}`);
-            await roleMembers.forEach(member => member.roles.remove(onlineOnlyID)); 
+            roleMembers.forEach(async member => { 
+                if (member.presence.status === 'online') await member.roles.add(tempRoleID) 
+            });
+            await message.channel.send(`${rolesCache.get(tempRoleID)}`);
+            roleMembers.forEach(async member => member.roles.remove(tempRoleID)); 
+            
         } catch (error) {
-            console.error(error);
+            console.log(error)
         }
-    },
-    execute(message, args) {
-        if (args[0] === 'xmage') this.pingRole('585313738169778177','790139800086118430', message) 
-        else if (args[0] === 'cock') this.pingRole('585314755976364043', '790129809794531328',message);
     }
-};
+}
