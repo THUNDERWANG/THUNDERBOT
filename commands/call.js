@@ -15,7 +15,7 @@ module.exports = {
         };
     },
     execute(message, args) {
-        if (args[0].toLowerCase() === 'xmage') this.mentionRole('789944500386529300', '789443609178800189', message) 
+        if (args[0].toLowerCase() === 'xmage') this.mentionRole('585313738169778177', '790139800086118430', message) 
         else if(args[0].toLowerCase() === 'cock') this.mentionRole('585314755976364043', '790129809794531328', message)
     }
 };
