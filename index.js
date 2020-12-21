@@ -14,7 +14,7 @@ for (const file of commandFiles) {
 
 const prefix = '.';
 
-client.once('ready', () => console.log('I am ready!'));
+client.once('ready', () => console.log('Bzz, I am ready!'));
 
 client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -28,7 +28,11 @@ client.on('message', message => {
         
         case 'call':
             client.commands.get('call').execute(message, args);
-            break;      
+            break;
+            
+        case 'test':
+            client.commands.get('test').execute(message, args);
+            break;    
     };
 });
 
