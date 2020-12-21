@@ -1,34 +1,21 @@
 module.exports = {
     name: 'call',
     description: 'clears a temp role, adds online-only users to a temp role, pings role',
-    async execute(message, args, client) {
-       // Maybe check to see if folks are in the temp pingable role and remove them first?
-
-        function findRoleID(name, rolesCache) {
-            let roleID;
-            for (let [key, value] of rolesCache) {
-                if (value.name.toLowerCase() === name.toLowerCase()) {
-                    roleID = key;
-                };
-            };
-            return roleID;
-        };
-
+    async mentionRole(roleID, tempRoleID, message) {
         try {
-            const rolesCache = await message.guild.roles.cache;
-
-            const roleID = findRoleID(args[0], rolesCache); 
-            const tempRoleID = findRoleID('Xmage Online', rolesCache);
-
-            const roleMembers = await rolesCache.get(roleID).members;
-            roleMembers.forEach(async member => { 
-                if (member.presence.status === 'online') await member.roles.add(tempRoleID) 
+            const role = await message.guild.roles.fetch(roleID, false, true);
+            role.members.forEach(async member => {
+                if (member.presence.status === 'online') await member.roles.add(tempRoleID);
             });
-            await message.channel.send(`${rolesCache.get(tempRoleID)}`);
-            roleMembers.forEach(async member => member.roles.remove(tempRoleID)); 
-            
+            await message.channel.send(`<@&${tempRoleID}>`);
+            const tempRole = await message.guild.roles.fetch(tempRoleID, false, true);
+            tempRole.members.forEach(async member => member.roles.remove(tempRoleID));
         } catch (error) {
             console.log(error)
-        }
+        };
+    },
+    execute(message, args) {
+        if (args[0].toLowerCase() === 'xmage') this.mentionRole('789944500386529300', '789443609178800189', message) 
+        else if(args[0].toLowerCase() === 'cock') this.mentionRole('585314755976364043', '790129809794531328', message)
     }
-}
+};
