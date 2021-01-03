@@ -40,11 +40,11 @@ discordClient.on('message', message => {
 		mess.checkCool(command, message, cooldowns);
 		command.execute(message, args);
 	} catch (error) {
-		// TODO: FIX THIS
+        // TODO: FIX THIS
+		console.error(error);
 		if (error.message === 'checkArgs') return;
 		if (error.message === 'checkGuild') return;
 		if (error.message === 'checkCool') return;
-		console.error(error);
 	}
 });
 
