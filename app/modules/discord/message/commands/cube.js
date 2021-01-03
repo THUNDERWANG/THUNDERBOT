@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
-const db = require('../modules/database/index.js');
-const configs = require('../../config/configs.js');
+const db = require('../../../database/index.js');
+const configs = require('../../../../config/configs.js');
 
 module.exports = {
 	name: 'cube',
@@ -19,7 +19,7 @@ module.exports = {
 			if (arg === 'me') {
 				const response = await db.cubes.findAll({ where: { discordTag: message.author.tag } });
 				const cubes = JSON.parse(JSON.stringify(response));
-				if (cubes.length === 0) return message.reply(' has not set any cubes!', { allowedMentions: { repliedUser: false } });
+				if (cubes.length === 0) return message.channel.send(`<@${message.author.id}> has not set any cubes!`, { allowedMentions: { repliedUser: false } });
 				const reply = new Discord.MessageEmbed()
 					.setColor(message.guild.roles.cache.get(configs.Discord.botId.color))
 					.setTitle(`${message.author.tag}'s Cubes`);

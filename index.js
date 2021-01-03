@@ -1,73 +1,51 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const configs = require('./config/configs.js');
+const configs = require('./app/config/configs.js');
 const db = require('./app/modules/database/index.js');
-const { welcome } = require('./app/startup/welcome.js');
+const ready = require('./app/modules/discord/ready/index.js');
+const guild = require('./app/modules/discord/guild/index.js');
+const mess = require('./app/modules/discord/message/index.js');
 
 const discordClient = new Discord.Client();
 const prefix = configs.Discord.prefix;
 discordClient.commands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./app/commands/').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const command = require(`./app/commands/${file}`);
-	discordClient.commands.set(command.name, command);
-}
+discordClient.startup = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
-discordClient.once('ready', async () => {
-	try {
-		await db.sequelize.sync().then(()=>console.log('DB ready'));
-		console.log('Bzz, THUNDERBOT is ready!');
-	} catch(error) {
-		console.error(error);
-	}
+const commandFiles = fs.readdirSync('./app/modules/discord/message/commands/').filter(file => file.endsWith('.js') && file !== 'example.js');
+commandFiles.forEach(file => {
+	const command = require(`./app/modules/discord/message/commands/${file}`);
+	discordClient.commands.set(command.name, command);
 });
 
-discordClient.on('guildMemberAdd', async member => {
-	try {
-		await welcome(member);
-	} catch(error) {
-		console.error(error);
-	}
+discordClient.once('ready', () => {
+	ready.dbSync(db);
+	console.log('Bzz, THUNDERBOT is ready!');
 });
 
-discordClient.on('message', async message => {
+discordClient.on('guildMemberAdd', member => {
+	guild.germify(member);
+	guild.welcome(member);
+});
+
+discordClient.on('message', message => {
 	try {
 		if (!message.content.startsWith(prefix) || message.author.bot) return;
 		const args = message.content.toLowerCase().slice(prefix.length).split(/ +/);
 		const commandName = args.shift().toLowerCase();
-
 		const command = discordClient.commands.get(commandName) || discordClient.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) return;
-		if (command.args && !args.length) {
-			return message.channel.send(`Did you mean ${process.env.PREFIX}${command.name} ${command.usage}?`);
-		// } else if (!command.arg && args.length) {
-		//	return message.channel.send('This command does not require arguments.');
-		}
-		if (command.guildOnly && message.channel.type === 'dm') {
-			return message.channel.send('This command can only be used in the server!');
-		}
-		if (!cooldowns.has(commandName)) {
-			cooldowns.set(commandName, new Discord.Collection());
-		}
-		const timestamps = cooldowns.get(commandName);
-		if (!timestamps.has(message.author.id)) {
-			const cooldown = (command.cooldown || 0) * 1000;
-			timestamps.set(message.author.id, Date.now() + cooldown);
-			setTimeout(() => { timestamps.delete(message.author.id); }, cooldown);
-		} else {
-			const expirationTime = timestamps.get(message.author.id);
-			const time = Date.now();
-			if (expirationTime > Date.now()) {
-				return message.channel.send(`<@${message.author.id}>, please wait ${Math.ceil((expirationTime - time) / 1000)} seconds`);
-			}
-		}
+		mess.checkArgs(command, message, args);
+		mess.checkGuild(command, message);
+		mess.checkCool(command, message, cooldowns);
 		command.execute(message, args);
-
 	} catch (error) {
+		// TODO: FIX THIS
+		if (error.message === 'checkArgs') return;
+		if (error.message === 'checkGuild') return;
+		if (error.message === 'checkCool') return;
 		console.error(error);
-		message.reply('could not execute that command!');
 	}
 });
 
-discordClient.login(configs.Discord.token);
+discordClient.login(configs.Discord.botToken);

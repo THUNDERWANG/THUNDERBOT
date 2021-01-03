@@ -3,9 +3,9 @@ dotenv.config();
 
 module.exports = {
 	Discord: {
-		botId: process.env.BOT_ID,
-		token: process.env.DISCORD_BOT_TOKEN,
-		prefix: process.env.PREFIX,
+		botId: process.env.DISCORD_BOT_ID,
+		botToken: process.env.DISCORD_BOT_TOKEN,
+		prefix: process.env.DISCORD_PREFIX,
 	},
 	Sheets: {
 		email: process.env.GOOGLE_CLIENT_EMAIL,

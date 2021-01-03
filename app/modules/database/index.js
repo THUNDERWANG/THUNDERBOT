@@ -1,8 +1,7 @@
-const configs = require('../../../config/configs');
+const configs = require('../../config/configs');
 const { Sequelize, DataTypes } = require('sequelize');
 const User = require('./models/user.model.js');
 const Cube = require('./models/cube.model.js');
-const controllers = require('./controllers/controllers.js');
 
 const sequelize = new Sequelize(configs.Sequelize.url, { logging: false });
 // const sequelize = new Sequelize('database', 'username', 'password', {
@@ -12,13 +11,13 @@ const sequelize = new Sequelize(configs.Sequelize.url, { logging: false });
 // 	logging: false,
 // });
 
-const db = {};
-db.sequelize = sequelize;
-db.users = User(sequelize, DataTypes);
-db.cubes = Cube(sequelize, DataTypes);
-db.controllers = controllers;
+const users = User(sequelize, DataTypes);
+const cubes = Cube(sequelize, DataTypes);
+users.hasMany(cubes, { foreignKey: { allowNull: false } });
+cubes.belongsTo(users);
 
-db.users.hasMany(db.cubes, { foreignKey: { allowNull: false } });
-db.cubes.belongsTo(db.users);
-
-module.exports = db;
+module.exports = {
+	sequelize,
+	users,
+	cubes,
+};

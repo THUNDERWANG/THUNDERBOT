@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
-const db = require('../modules/database/index.js');
-const levels = require('../modules/levels/index.js');
-const configs = require('../../config/configs.js');
+const { tierMap, findRoles } = require('../../../levels/index.js');
+const db = require('../../../database/index.js');
+const configs = require('../../../../config/configs.js');
 
 // IF YOU ARE GOING TO message.reply() or message.channel.send() AN @ROLES MAKE SURE TO INCLUDE THE OPTION { allowedMentions: { parse: ['users'] } }
 // OTHERWISE YOU ARE GOING TO PING EVERYONE IN THE ROLE!!! EMBEDDED MESSAGES ARE SAFE THOUGH.
@@ -19,8 +19,8 @@ module.exports = {
 			const arg = args[0];
 
 			if (arg === 'all') {
-				const description = Array.from(levels.tiersMap.keys()).reduce((descrip, threshold) => (
-					descrip + `<@&${levels.tiersMap.get(threshold).id}> | ${threshold}+ wins \n\n`
+				const description = Array.from(tierMap.keys()).reduce((descrip, threshold) => (
+					descrip + `<@&${tierMap.get(threshold).id}> | ${threshold}+ wins \n\n`
 				), '');
 				const messageEmbed = new Discord.MessageEmbed()
 					.setColor(message.guild.roles.cache.get(configs.Discord.botId).color)
@@ -29,13 +29,11 @@ module.exports = {
 				await message.channel.send(messageEmbed);
 
 			} else if (arg === 'me') {
-				const [user] = await db.users.findOrCreate({
-					where: { discordTag: message.author.tag },
-				});
-				const { currentRoleId, nextRoleId, toNext } = levels.controllers.findCurrentNextRoles(levels.tiersMap, user.points);
-				const reply = nextRoleId === null ?
-					`is a <@&${currentRoleId}> at the **max level** with **${user.points}** points :triumph:`
-					: `is a <@&${currentRoleId}> with **${user.points}** points; **${toNext}** more to <@&${nextRoleId}>!`;
+				const [user] = await db.users.findOrCreate({ where: { discordTag: message.author.tag } });
+				const { current, next, toNext } = findRoles(user.points);
+				const reply = next ?
+					`is a <@&${current}> with **${user.points}** points; **${toNext}** more to <@&${next}>!` :
+					`is a <@&${current}> at the **max level** with **${user.points}** points :triumph:`;
 				await message.channel.send(`<@${message.author.id}> ${reply}`, { allowedMentions: { parse: [] } });
 
 			} else if (arg === 'up') {
@@ -48,18 +46,20 @@ module.exports = {
 					await user.increment('points');
 					points++;
 				}
-				if (levels.tiersMap.has(points)) {
-					const roleId = levels.tiersMap.get(points).id;
+				if (tierMap.has(points)) {
+					const roleId = tierMap.get(points).id;
 					await message.member.roles.add(roleId);
 					const roleColor = message.guild.roles.cache.get(roleId).color;
 					const messageEmbed = new Discord.MessageEmbed()
 						.setColor(roleColor)
 						.setTitle(':fire: LEVEL UP :fire:')
-						.setImage(levels.tiersMap.get(points).image)
+						.setImage(tierMap.get(points).image)
 						.setDescription(`<@${message.author.id}> has reached <@&${roleId}> with **${points}** points!`);
 					return await message.channel.send(messageEmbed);
 				}
+				const { current } = findRoles(user.points);
 				await message.channel.send(`<@${message.author.id}> now has **${points}** points. :confetti_ball:`, { allowedMentions: { parse: [] } });
+				await message.member.roles.add(current);
 
 			} else if (arg === 'down') {
 				const [user] = await db.users.findOrCreate({
@@ -68,19 +68,25 @@ module.exports = {
 				let points = user.points;
 				if (points > 0) {
 					await user.decrement('points');
-					if (levels.tiersMap.has(points)) {
-						const roleId = levels.tiersMap.get(points).id;
+					points--;
+					if (tierMap.has(points)) {
+						const roleId = tierMap.get(points).id;
 						await message.member.roles.remove(roleId);
-						return await message.channel.send(`<@${message.author.id}> now has **${--points}** points`, { allowedMentions: { parse: [] } });
 					}
-					return await message.channel.send(`<@${message.author.id}> now has **${--points}** points.`, { allowedMentions: { parse: [] } });
+					return await message.channel.send(`<@${message.author.id}> now has **${points}** points.`, { allowedMentions: { parse: [] } });
 				}
 				message.channel.send(`<@${message.author.id}> can not go below 0 points!`, { allowedMentions: { parse: [] } });
 			}
 		} catch (error) {
-			const reply = error.name === 'SequelizeUniqueConstraintError' ? 'That tag already exists.' : error.message;
-			message.reply(reply);
+			let reply = 'Something went wrong!';
+			if (error.name === 'SequelizeUniqueConstraintError') {
+				reply = 'That tag already exists!';
+			} else if (error.name === 'TypeError [INVALID_TYPE]') {
+				reply = '\'s next level could not be found!';
+			}
 			console.error(error);
+			message.channel.send(`<@${message.author.id}> ${reply}`, { allowedMentions: { parse: [] } });
+
 		}
 	},
 };
