@@ -41,10 +41,10 @@ discordClient.on('message', message => {
 		command.execute(message, args);
 	} catch (error) {
         // TODO: FIX THIS
-		console.error(error);
 		if (error.message === 'checkArgs') return;
 		if (error.message === 'checkGuild') return;
 		if (error.message === 'checkCool') return;
+		console.error(error);
 	}
 });
 
