@@ -7,13 +7,18 @@ module.exports = {
 	args: false,
 	guildOnly: true,
 	execute(message) {
-		const messageEmbed = new Discord.MessageEmbed()
-			.setColor(message.guild.roles.cache.get(process.env.BOT_ID).color)
-			.setTitle('Commands');
-		message.client.commands.forEach(command => {
-			messageEmbed.addFields(
-				{ name: `${process.env.PREFIX}${command.name}`, value: `${command.description}` });
-		});
-		return message.channel.send(messageEmbed);
+		try {
+			const messageEmbed = new Discord.MessageEmbed()
+				.setColor(message.guild.roles.cache.get(process.env.BOT_ID).color)
+				.setTitle('Commands');
+			message.client.commands.forEach(command => {
+				messageEmbed.addFields(
+					{ name: `${process.env.PREFIX}${command.name}`, value: `${command.description}` });
+			});
+			return message.channel.send(messageEmbed);
+		} catch (error) {
+			console.error(error);
+		}
+
 	},
 };

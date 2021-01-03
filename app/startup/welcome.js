@@ -10,10 +10,14 @@ module.exports.welcome = client => {
 	const germId = '585662276212621333';
 
 	client.on('guildMemberAdd', async member => {
-		const index = Math.floor(Math.random() * messages.length);
-		const welcomeMessage = `Welcome <@${member.id}>, ` + messages[index];
-		const channel = member.guild.channels.cache.get(welcomeId);
-		await channel.send(welcomeMessage);
-		await member.roles.add(germId);
+		try {
+			const index = Math.floor(Math.random() * messages.length);
+			const welcomeMessage = `Welcome <@${member.id}>, ` + messages[index];
+			const channel = member.guild.channels.cache.get(welcomeId);
+			await channel.send(welcomeMessage);
+			await member.roles.add(germId);
+		} catch(error) {
+			console.error(error);
+		}
 	});
 };
