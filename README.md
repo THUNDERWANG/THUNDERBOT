@@ -4,4 +4,4 @@ It is hosted via Heroku and uses mySQL.
 
 Instructions:
 1. Create a .env file using the example.
-2. Update Levels in configs with the appropriate IDs.
+2. Update Levels and Discord in configs with the appropriate IDs.

@@ -36,14 +36,12 @@ discordClient.on('message', message => {
 		const command = discordClient.commands.get(commandName) || discordClient.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) return;
 		mess.checkArgs(command, message, args);
+		mess.checkMod(message);
 		mess.checkGuild(command, message);
 		mess.checkCool(command, message, cooldowns);
 		command.execute(message, args);
 	} catch (error) {
-		// TODO: FIX THIS
-		if (error.message === 'checkArgs') return;
-		if (error.message === 'checkGuild') return;
-		if (error.message === 'checkCool') return;
+		if (error.message.startsWith('check')) return;
 		console.error(error);
 	}
 });

@@ -5,6 +5,7 @@ module.exports = {
 		botId: process.env.DISCORD_BOT_ID_DEV,
 		botToken: process.env.DISCORD_BOT_TOKEN_DEV,
 		botPrefix: process.env.DISCORD_BOT_PREFIX,
+		modId: '795506335721717760',
 	},
 	Sheets: {
 		email: process.env.GOOGLE_CLIENT_EMAIL,

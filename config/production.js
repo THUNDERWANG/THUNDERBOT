@@ -5,6 +5,8 @@ module.exports = {
 		botId: process.env.DISCORD_BOT_ID_PRO,
 		botToken: process.env.DISCORD_BOT_TOKEN_PRO,
 		botPrefix: process.env.DISCORD_BOT_PREFIX,
+		modId: '313744722654920708',
+		welcomeId: '659117988405837832',
 	},
 	Database: {
 		url: process.env.CLEARDB_DATABASE_URL,
