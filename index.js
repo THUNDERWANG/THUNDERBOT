@@ -32,7 +32,7 @@ discordClient.on('message', message => {
 	try {
 		if (!message.content.startsWith(prefix) || message.author.bot) return;
 		const args = message.content.toLowerCase().slice(prefix.length).split(/ +/);
-		const commandName = args.shift().toLowerCase();
+		const commandName = args.shift();
 		const command = discordClient.commands.get(commandName) || discordClient.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) return;
 		mess.checkArgs(command, message, args);

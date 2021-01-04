@@ -7,6 +7,8 @@ module.exports = {
 		botPrefix: process.env.DISCORD_BOT_PREFIX,
 		modId: '313744722654920708',
 		welcomeId: '659117988405837832',
+		xmageId: '585313738169778177',
+		triceId: '585314755976364043',
 	},
 	Database: {
 		url: process.env.CLEARDB_DATABASE_URL,
