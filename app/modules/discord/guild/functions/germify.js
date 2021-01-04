@@ -1,7 +1,8 @@
+const { tiers } = require('config').Levels;
+
 module.exports = async member => {
 	try {
-		const germId = '585662276212621333';
-		await member.roles.add(germId);
+		await member.roles.add(tiers[0].id);
 	} catch(error) {
 		console.error(error);
 	}

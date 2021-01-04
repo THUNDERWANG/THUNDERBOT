@@ -1,12 +1,11 @@
 const Discord = require('discord.js');
 const db = require('../../../database/index.js');
-const configs = require('../../../../config/configs.js');
 
 module.exports = {
 	name: 'cube',
 	aliases: ['lag'],
 	args: true,
-	cooldown: 0,
+	cooldown: 2,
 	usage: ['[add], [delete], [me], [<@tag>]'],
 	description: 'add/remove a cube link',
 	async execute(message, args) {
@@ -21,7 +20,7 @@ module.exports = {
 				const cubes = JSON.parse(JSON.stringify(response));
 				if (cubes.length === 0) return message.channel.send(`<@${message.author.id}> has not set any cubes!`, { allowedMentions: { repliedUser: false } });
 				const reply = new Discord.MessageEmbed()
-					.setColor(message.guild.roles.cache.get(configs.Discord.botId.color))
+					.setColor(message.member.roles.highest.color)
 					.setTitle(`${message.author.tag}'s Cubes`);
 				cubes.forEach((cube, index) => {
 					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
@@ -34,30 +33,34 @@ module.exports = {
 					include: db.cubes,
 				});
 				const user = response[0].toJSON();
-				if (user.cubes.length >= maxSlots) return message.reply(' has no more open slots!');
+				if (user.cubes && user.cubes.length >= maxSlots) return message.reply(' has no more open slots!');
 				await message.channel.send('**Enter cube name or *cancel* **');
 				const filterName = input => input.author.id === message.author.id;
 				const collectorName = await message.channel.awaitMessages(filterName, { max: 1, time: 20000, errors: ['time'] });
-				if (collectorName.first().content.toLowerCase() === 'cancel') throw new Error('cancel');
+				if (collectorName.first().content.toLowerCase() === 'cancel') {
+					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
+				}
 				await message.channel.send('**Enter cube URL or *cancel* **');
 				const filterURL = input => {
 					if (input.author.id !== message.author.id) return false;
 					if (input.content.toLowerCase() === 'cancel') return true;
 					if (domains.some(domain => input.content.toLowerCase().startsWith(domain))) return true;
-					message.channel.send('**URL must be from Cube Cobra/Tutor domain**', { allowedMentions: { repliedUser: false } });
+					message.channel.send('**URL must be from Cube Cobra/Tutor domain**');
 				};
 				const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 6, time: 20000, dispose: true, errors: ['time'] });
-				if (collectorURL.first().content.toLowerCase() === 'cancel') throw new Error('cancel');
+				if (collectorURL.first().content.toLowerCase() === 'cancel') {
+					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
+				}
 				await db.cubes.create({ name:collectorName.first().content, link: collectorURL.first().content, discordTag: user.discordTag, userId: user.id });
 				await message.channel.send(`<@${message.author.id}> has added **${collectorName.first().content}**`, { allowedMentions: { parse: [] } });
 
 			} else if (args[0] === 'delete') {
 				const response = await db.cubes.findAll({ where: { discordTag: message.author.tag } });
 				const cubes = JSON.parse(JSON.stringify(response));
-				if (response.length === 0) return message.channel.send(`<@${message.author.id}> has not set any cubes!`, { allowedMentions: { parse: [] } });
+				if (cubes.length === 0) return message.channel.send(`<@${message.author.id}> has not set any cubes!`, { allowedMentions: { parse: [] } });
 				await message.channel.send('**Enter number or *cancel* **');
 				const reply = new Discord.MessageEmbed()
-					.setColor(message.guild.roles.cache.get(configs.Discord.botId.color))
+					.setColor(message.member.roles.highest.color)
 					.setTitle(`${message.author.tag}'s Cubes`);
 				cubes.forEach((cube, index) => {
 					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
@@ -77,27 +80,27 @@ module.exports = {
 					}
 				};
 				const collectorChoice = await message.channel.awaitMessages(filterChoice, { max: 1, time: 10000, dispose: true, errors: ['time'] });
-				if (collectorChoice.first().content.toLowerCase() === 'cancel') throw new Error('cancel');
+				if (collectorChoice.first().content.toLowerCase() === 'cancel') {
+					return message.channel.send(`<@${message.author.id}> has cancelled`);
+				}
 				const deleteIndex = collectorChoice.first().content - 1;
 				const selectedCube = response[deleteIndex];
 				await selectedCube.destroy();
 				await message.channel.send(`<@${message.author.id}> has deleted **${cubes[deleteIndex].name}**`, { allowedMentions: { parse: [] } });
 
-			} else {
+			} else if (arg.startsWith('<@') && arg.endsWith('>')) {
 				let discordTag = null;
-				if (arg.startsWith('<@') && arg.endsWith('>')) {
-					let id = arg.slice(2, -1);
-					if (id.startsWith('!')) {
-						id = id.slice(1);
-						discordTag = message.guild.members.cache.get(id).user.tag;
-					}
+				let id = arg.slice(2, -1);
+				if (id.startsWith('!')) {
+					id = id.slice(1);
+					discordTag = message.guild.members.cache.get(id).user.tag;
 				}
 				if (discordTag) {
 					const response = await db.cubes.findAll({ where: { discordTag: discordTag } });
 					const cubes = JSON.parse(JSON.stringify(response));
 					if (cubes.length === 0) return message.channel.send(`${arg} has not set any cubes!`, { users: [] });
 					const reply = new Discord.MessageEmbed()
-						.setColor(message.guild.roles.cache.get(configs.Discord.botId.color))
+						.setColor(message.guild.members.cache.get(id).roles.highest.color)
 						.setTitle(`${discordTag}'s Cubes`);
 					cubes.forEach((cube, index) => {
 						if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
@@ -105,17 +108,12 @@ module.exports = {
 					message.channel.send(reply);
 				}
 			}
-
 		} catch (error) {
 			let reply = `<@${message.author.id}>, something went wrong`;
-			if (error.message === 'cancel') {
-				reply = `<@${message.author.id}> has cancelled`;
-			} else if (error.name === 'SequelizeUniqueConstraintError') {
+			if (error.name === 'SequelizeUniqueConstraintError') {
 				reply = `<@${message.author.id}>'s tag already exists`;
-				console.error(error);
-			} else if (!error.size) {
-				reply = `<@${message.author.id}> has timed out`;
 			}
+			console.error(error);
 			message.channel.send(reply, { allowedMentions: { parse: [] } });
 		}
 

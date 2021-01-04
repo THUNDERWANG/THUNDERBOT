@@ -1,13 +1,13 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const configs = require('./app/config/configs.js');
+const configs = require('config');
 const db = require('./app/modules/database/index.js');
 const ready = require('./app/modules/discord/ready/index.js');
 const guild = require('./app/modules/discord/guild/index.js');
 const mess = require('./app/modules/discord/message/index.js');
 
 const discordClient = new Discord.Client();
-const prefix = configs.Discord.prefix;
+const prefix = configs.Discord.botPrefix;
 discordClient.commands = new Discord.Collection();
 discordClient.startup = new Discord.Collection();
 const cooldowns = new Discord.Collection();
@@ -40,7 +40,7 @@ discordClient.on('message', message => {
 		mess.checkCool(command, message, cooldowns);
 		command.execute(message, args);
 	} catch (error) {
-        // TODO: FIX THIS
+		// TODO: FIX THIS
 		if (error.message === 'checkArgs') return;
 		if (error.message === 'checkGuild') return;
 		if (error.message === 'checkCool') return;

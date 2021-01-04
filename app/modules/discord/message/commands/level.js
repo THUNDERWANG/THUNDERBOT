@@ -1,8 +1,10 @@
 const Discord = require('discord.js');
-const { tierMap, findRoles } = require('../../../levels/index.js');
+const { findRoles } = require('../../../levels/index.js');
+const tiers = require('config').Levels.tiers;
 const db = require('../../../database/index.js');
-const configs = require('../../../../config/configs.js');
+const botId = require('config').get('Discord').botId;
 
+// ***READ THIS FIRST***
 // IF YOU ARE GOING TO message.reply() or message.channel.send() AN @ROLES MAKE SURE TO INCLUDE THE OPTION { allowedMentions: { parse: ['users'] } }
 // OTHERWISE YOU ARE GOING TO PING EVERYONE IN THE ROLE!!! EMBEDDED MESSAGES ARE SAFE THOUGH.
 // EXAMPLE await message.channel.send(`<@${message.author.id}> is a <@&${role.id}>`, { allowedMentions: { parse: [] } });
@@ -19,11 +21,11 @@ module.exports = {
 			const arg = args[0];
 
 			if (arg === 'all') {
-				const description = Array.from(tierMap.keys()).reduce((descrip, threshold) => (
-					descrip + `<@&${tierMap.get(threshold).id}> | ${threshold}+ wins \n\n`
+				const description = Object.keys(tiers).reduce((descrip, threshold) => (
+					descrip + `<@&${tiers.get(threshold).id}> | ${threshold}+ wins \n\n`
 				), '');
 				const messageEmbed = new Discord.MessageEmbed()
-					.setColor(message.guild.roles.cache.get(configs.Discord.botId).color)
+					.setColor(message.guild.roles.cache.get(botId).color)
 					.setTitle('Tiers')
 					.setDescription(description);
 				await message.channel.send(messageEmbed);
@@ -46,15 +48,15 @@ module.exports = {
 					await user.increment('points');
 					points++;
 				}
-				if (tierMap.has(points)) {
-					const roleId = tierMap.get(points).id;
-					await message.member.roles.add(roleId);
-					const roleColor = message.guild.roles.cache.get(roleId).color;
+				const threshold = tiers[points];
+				if (threshold) {
+					await message.member.roles.add(threshold.id);
+					const roleColor = message.guild.roles.cache.get(threshold.id).color;
 					const messageEmbed = new Discord.MessageEmbed()
 						.setColor(roleColor)
 						.setTitle(':fire: LEVEL UP :fire:')
-						.setImage(tierMap.get(points).image)
-						.setDescription(`<@${message.author.id}> has reached <@&${roleId}> with **${points}** points!`);
+						.setImage(threshold.image)
+						.setDescription(`<@${message.author.id}> has reached <@&${threshold.id}> with **${points}** points!`);
 					return await message.channel.send(messageEmbed);
 				}
 				const { current } = findRoles(user.points);
@@ -65,15 +67,11 @@ module.exports = {
 				const [user] = await db.users.findOrCreate({
 					where: { discordTag: message.author.tag },
 				});
-				let points = user.points;
-				if (points > 0) {
+				if (user.points > 0) {
 					await user.decrement('points');
-					points--;
-					if (tierMap.has(points)) {
-						const roleId = tierMap.get(points).id;
-						await message.member.roles.remove(roleId);
-					}
-					return await message.channel.send(`<@${message.author.id}> now has **${points}** points.`, { allowedMentions: { parse: [] } });
+					const threshold = tiers[user.points];
+					if (threshold) { await message.member.roles.remove(threshold.id); }
+					return await message.channel.send(`<@${message.author.id}> now has **${--user.points}** points.`, { allowedMentions: { parse: [] } });
 				}
 				message.channel.send(`<@${message.author.id}> can not go below 0 points!`, { allowedMentions: { parse: [] } });
 			}
@@ -86,7 +84,6 @@ module.exports = {
 			}
 			console.error(error);
 			message.channel.send(`<@${message.author.id}> ${reply}`, { allowedMentions: { parse: [] } });
-
 		}
 	},
 };
