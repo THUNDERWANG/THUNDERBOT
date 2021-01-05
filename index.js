@@ -36,7 +36,7 @@ discordClient.on('message', message => {
 		const command = discordClient.commands.get(commandName) || discordClient.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 		if (!command) return;
 		mess.checkArgs(command, message, args);
-		mess.checkMod(message);
+		mess.checkMod(command, message);
 		mess.checkGuild(command, message);
 		mess.checkCool(command, message, cooldowns);
 		command.execute(message, args);
