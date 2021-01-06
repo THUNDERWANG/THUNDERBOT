@@ -1,4 +1,8 @@
 module.exports = async (db) => {
-	await db.sequelize.sync();
-	console.log('DB ready!');
+	try {
+		await db.sequelize.sync();
+		console.log('DB ready!');
+	} catch {
+		console.error('DB could not be synced!');
+	}
 };

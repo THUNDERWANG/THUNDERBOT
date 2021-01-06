@@ -9,6 +9,7 @@ module.exports = {
 		welcomeId: '659117988405837832',
 		xmageId: '585313738169778177',
 		triceId: '585314755976364043',
+		cubeChatId: '306902973706141708',
 	},
 	Database: {
 		url: process.env.CLEARDB_DATABASE_URL,

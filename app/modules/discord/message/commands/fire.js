@@ -1,7 +1,6 @@
 module.exports = {
 	name: 'fired',
 	aliases: ['fire'],
-	args: false,
 	description: 'announce that the draft has fired',
 	async execute(message) {
 		try {

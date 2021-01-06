@@ -6,6 +6,9 @@ module.exports = {
 		botToken: process.env.DISCORD_BOT_TOKEN_DEV,
 		botPrefix: process.env.DISCORD_BOT_PREFIX,
 		modId: '795506335721717760',
+		triceId: '796164469738831872',
+		xmageId: '796164518115541012',
+		cubeChatId: '794675408570023940',
 	},
 	Sheets: {
 		email: process.env.GOOGLE_CLIENT_EMAIL,

@@ -15,7 +15,7 @@ module.exports = {
 	args: true,
 	usage: '[all], [me], [up], [down]',
 	guildOnly: true,
-	cooldown: 0,
+	cooldown: 1,
 	async execute(message, args) {
 		try {
 			const arg = args[0];

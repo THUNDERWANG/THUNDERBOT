@@ -20,6 +20,7 @@ commandFiles.forEach(file => {
 
 discordClient.once('ready', () => {
 	ready.dbSync(db);
+	ready.broadcast(discordClient);
 	console.log('Bzz, THUNDERBOT is ready!');
 });
 

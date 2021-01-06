@@ -3,7 +3,6 @@ const db = require('../../../database/index.js');
 
 module.exports = {
 	name: 'cube',
-	aliases: ['lag'],
 	args: true,
 	cooldown: 2,
 	usage: ['[add], [delete], [me], [<@tag>]'],
@@ -54,7 +53,7 @@ module.exports = {
 				await db.cubes.create({ name:collectorName.first().content, link: collectorURL.first().content, discordTag: user.discordTag, userId: user.id });
 				await message.channel.send(`<@${message.author.id}> has added **${collectorName.first().content}**`, { allowedMentions: { parse: [] } });
 
-			} else if (args[0] === 'delete') {
+			} else if (args[0] === 'delete' || args[0] === 'remove') {
 				const response = await db.cubes.findAll({ where: { discordTag: message.author.tag } });
 				const cubes = JSON.parse(JSON.stringify(response));
 				if (cubes.length === 0) return message.channel.send(`<@${message.author.id}> has not set any cubes!`, { allowedMentions: { parse: [] } });
@@ -112,8 +111,10 @@ module.exports = {
 			let reply = `<@${message.author.id}>, something went wrong`;
 			if (error.name === 'SequelizeUniqueConstraintError') {
 				reply = `<@${message.author.id}>'s tag already exists`;
+			} else if (!error.size) {
+				reply = `<@${message.author.id}> has timed out.`;
 			}
-			console.error(error);
+			console.error(error.toString());
 			message.channel.send(reply, { allowedMentions: { parse: [] } });
 		}
 
