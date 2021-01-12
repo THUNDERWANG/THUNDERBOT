@@ -35,19 +35,22 @@ module.exports = {
 				if (user.cubes && user.cubes.length >= maxSlots) return message.reply(' has no more open slots!');
 				await message.channel.send('**Enter cube name or *cancel* **');
 				const filterName = input => input.author.id === message.author.id;
-				const collectorName = await message.channel.awaitMessages(filterName, { max: 1, time: 20000, errors: ['time'] });
-				if (collectorName.first().content.toLowerCase() === 'cancel') {
+				const collectorName = await message.channel.awaitMessages(filterName, { max: 1, time: 30000, errors: ['time'] });
+				const inputName = collectorName.first().content.toLowerCase();
+				if (inputName === 'cancel' || inputName.startsWith('.cube')) {
 					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
 				}
 				await message.channel.send('**Enter cube URL or *cancel* **');
 				const filterURL = input => {
+					const inputURL = input.content.toLowerCase();
 					if (input.author.id !== message.author.id) return false;
-					if (input.content.toLowerCase() === 'cancel') return true;
-					if (domains.some(domain => input.content.toLowerCase().startsWith(domain))) return true;
+					if (inputURL === 'cancel' || inputURL.startsWith('.cube')) return true;
+					if (domains.some(domain => inputURL.startsWith(domain))) return true;
 					message.channel.send('**URL must be from Cube Cobra/Tutor domain**');
 				};
-				const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 6, time: 20000, dispose: true, errors: ['time'] });
-				if (collectorURL.first().content.toLowerCase() === 'cancel') {
+				const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 6, time: 30000, dispose: true, errors: ['time'] });
+				const inputURL = collectorURL.first().content.toLowerCase();
+				if (inputURL === 'cancel' || inputURL.startsWith('.cube')) {
 					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
 				}
 				await db.cubes.create({ name:collectorName.first().content, link: collectorURL.first().content, discordTag: user.discordTag, userId: user.id });
