@@ -11,7 +11,7 @@ module.exports = {
 
 		try {
 			const arg = args[0];
-			const domains = ['https://www.cubetutor.com', 'https://cubecobra.com'];
+			const domains = ['www.cubetutor.com', 'www.cubecobra.com'];
 			const maxSlots = 5;
 
 			if (arg === 'me') {
@@ -45,7 +45,7 @@ module.exports = {
 					const inputURL = input.content.toLowerCase();
 					if (input.author.id !== message.author.id) return false;
 					if (inputURL === 'cancel' || inputURL.startsWith('.cube')) return true;
-					if (domains.some(domain => inputURL.startsWith(domain))) return true;
+					if (domains.some(domain => inputURL.includes(domain))) return true;
 					message.channel.send('**URL must be from Cube Cobra/Tutor domain**');
 				};
 				const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 6, time: 30000, dispose: true, errors: ['time'] });
