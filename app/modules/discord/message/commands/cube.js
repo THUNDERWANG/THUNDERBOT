@@ -32,7 +32,7 @@ module.exports = {
 					include: db.cubes,
 				});
 				const user = response[0].toJSON();
-				if (user.cubes && user.cubes.length >= maxSlots) return message.reply(' has no more open slots!');
+				if (user.cubes && user.cubes.length >= maxSlots) return await message.channel.send(`<@${message.author.id}> has no more open slots!`, { allowedMentions: { parse: [] } });
 				await message.channel.send('**Enter cube name or *cancel* **');
 				const filterName = input => input.author.id === message.author.id;
 				const collectorName = await message.channel.awaitMessages(filterName, { max: 1, time: 30000, errors: ['time'] });

@@ -2,7 +2,7 @@ const welcomeId = require('config').Discord.welcomeId;
 
 module.exports = async member => {
 
-	const m1 = 'come for the cube drafting, stay for the bad beats stories.';
+	const m1 = 'come for the cube drafts, stay for the bad beats stories.';
 	const m2 = 'may your P1P1s always be windmill slams!';
 	const m3 = 'may you always topdeck that lethal bolt.';
 	const m4 = 'and remember to bolt the bird!';
