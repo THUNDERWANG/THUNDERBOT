@@ -11,7 +11,7 @@ module.exports = {
 
 		try {
 			const arg = args[0];
-			const domains = ['www.cubetutor.com', 'www.cubecobra.com'];
+			const domains = ['cubetutor.com', 'cubecobra.com'];
 			const maxSlots = 5;
 
 			if (arg === 'me') {
