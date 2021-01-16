@@ -1,10 +1,10 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const configs = require('config');
-const db = require('./app/modules/database/index.js');
-const ready = require('./app/modules/discord/ready/index.js');
-const guild = require('./app/modules/discord/guild/index.js');
-const mess = require('./app/modules/discord/message/index.js');
+const db = require('./app/database/index.js');
+const ready = require('./app/discord/ready/index.js');
+const guild = require('./app/discord/guild/index.js');
+const mess = require('./app/discord/message/index.js');
 
 const discordClient = new Discord.Client();
 const prefix = configs.Discord.botPrefix;
@@ -12,9 +12,9 @@ discordClient.commands = new Discord.Collection();
 discordClient.startup = new Discord.Collection();
 const cooldowns = new Discord.Collection();
 
-const commandFiles = fs.readdirSync('./app/modules/discord/message/commands/').filter(file => file.endsWith('.js') && file !== 'example.js');
+const commandFiles = fs.readdirSync('./app/discord/message/commands/').filter(file => file.endsWith('.js') && file !== 'example.js');
 commandFiles.forEach(file => {
-	const command = require(`./app/modules/discord/message/commands/${file}`);
+	const command = require(`./app/discord/message/commands/${file}`);
 	discordClient.commands.set(command.name, command);
 });
 
