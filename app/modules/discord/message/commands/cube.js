@@ -20,7 +20,8 @@ module.exports = {
 				if (cubes.length === 0) return message.channel.send(`<@${message.author.id}> has not set any cubes!`, { allowedMentions: { repliedUser: false } });
 				const reply = new Discord.MessageEmbed()
 					.setColor(message.member.roles.highest.color)
-					.setTitle(`${message.author.tag}'s Cubes`);
+					.setTitle(`${message.author.tag}'s Cubes`)
+					.setThumbnail(message.author.avatarURL());
 				cubes.forEach((cube, index) => {
 					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
 				});
@@ -35,20 +36,27 @@ module.exports = {
 				if (user.cubes && user.cubes.length >= maxSlots) return await message.channel.send(`<@${message.author.id}> has no more open slots!`, { allowedMentions: { parse: [] } });
 				await message.channel.send('**Enter cube name or *cancel* **');
 				const filterName = input => input.author.id === message.author.id;
-				const collectorName = await message.channel.awaitMessages(filterName, { max: 1, time: 30000, errors: ['time'] });
+				const collectorName = await message.channel.awaitMessages(filterName, { max: 1, time: 45000, errors: ['time'] });
 				const inputName = collectorName.first().content.toLowerCase();
 				if (inputName === 'cancel' || inputName.startsWith('.cube')) {
 					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
 				}
 				await message.channel.send('**Enter cube URL or *cancel* **');
 				const filterURL = input => {
-					const inputURL = input.content.toLowerCase();
-					if (input.author.id !== message.author.id) return false;
-					if (inputURL === 'cancel' || inputURL.startsWith('.cube')) return true;
-					if (domains.some(domain => inputURL.includes(domain))) return true;
-					message.channel.send('**URL must be from Cube Cobra/Tutor domain**');
+					try {
+						const inputURL = input.content.toLowerCase();
+						if (input.author.id !== message.author.id) return false;
+						if (inputURL === 'cancel' || inputURL.startsWith('.cube')) return true;
+						if (!domains.includes(new URL(inputURL).hostname)) throw new Error('Wrong domain');
+						return true;
+					} catch (error) {
+						let reply = '**URL not valid. Try again.**';
+						if (error.message === 'Wrong domain') reply = '**Domain must be Cube Cobra/Tutor. Try again.**';
+						message.channel.send(reply);
+						return false;
+					}
 				};
-				const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 6, time: 30000, dispose: true, errors: ['time'] });
+				const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 6, time: 45000, dispose: true, errors: ['time'] });
 				const inputURL = collectorURL.first().content.toLowerCase();
 				if (inputURL === 'cancel' || inputURL.startsWith('.cube')) {
 					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
@@ -63,7 +71,8 @@ module.exports = {
 				await message.channel.send('**Enter number or *cancel* **');
 				const reply = new Discord.MessageEmbed()
 					.setColor(message.member.roles.highest.color)
-					.setTitle(`${message.author.tag}'s Cubes`);
+					.setTitle(`${message.author.tag}'s Cubes`)
+					.setThumbnail(message.author.avatarURL());
 				cubes.forEach((cube, index) => {
 					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
 				});
@@ -114,10 +123,10 @@ module.exports = {
 			let reply = `<@${message.author.id}>, something went wrong`;
 			if (error.name === 'SequelizeUniqueConstraintError') {
 				reply = `<@${message.author.id}>'s tag already exists`;
+				console.error(error.toString());
 			} else if (!error.size) {
 				reply = `<@${message.author.id}> has timed out.`;
 			}
-			console.error(error.toString());
 			message.channel.send(reply, { allowedMentions: { parse: [] } });
 		}
 
