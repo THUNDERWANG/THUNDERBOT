@@ -1,9 +1,9 @@
 module.exports = {
 	name: 'roll',
-	aliases: ['die'],
+	aliases: ['die', 'rng'],
 	args: true,
 	usage: ['[some number]'],
-	description: 'roll a die',
+	description: 'generate a number from 1-X',
 	async execute(message, args) {
 		try {
 			if (parseInt(args[0])) {
