@@ -113,7 +113,7 @@ module.exports = {
 					const reply = new Discord.MessageEmbed()
 						.setColor(message.guild.members.cache.get(id).roles.highest.color)
 						.setTitle(`${discordTag}'s Cubes`)
-						.setThumbnail(message.guild.members.cache.get(id).avatarURL());
+						.setThumbnail(message.guild.members.cache.get(id).user.avatarURL());
 					cubes.forEach((cube, index) => {
 						if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
 					});
