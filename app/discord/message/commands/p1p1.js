@@ -14,6 +14,16 @@ module.exports = {
 	async execute(message, args) {
 		const [arg1, arg2] = args;
 
+		const bonusQuestions = [];
+		bonusQuestions.push(':thumbsdown: What\'s the last pick? :thumbsdown:');
+		bonusQuestions.push(':hot_pepper: What\'s the spiciest pick? :hot_pepper:');
+		bonusQuestions.push(':two: What\'s the next two picks? :two:');
+		bonusQuestions.push(':boy: What\'s the Timmy pick? :boy:');
+		bonusQuestions.push(':woman_scientist: What\'s the Johnny pick? :woman_scientist:');
+		bonusQuestions.push(':smiling_imp: What\'s the Spike pick? :smiling_imp:');
+		bonusQuestions.push(':paintbrush: Which card has the best art? :paintbrush:');
+		const bonusQuestion = bonusQuestions[Math.floor(Math.random() * bonusQuestions.length)];
+
 		const messageEmbed = new Discord.MessageEmbed()
 			.setColor(message.member.roles.highest.color);
 
@@ -55,9 +65,9 @@ module.exports = {
 					if (err) throw new Error('could not buffer canvas');
 					const pack = new Discord.MessageAttachment(buff).setName('pack.png');
 					messageEmbed
-						.setTitle(`${arg2}`)
+						.setTitle(`${arg2} @Cube Tutor`)
 						.setURL(`https://www.cubetutor.com/viewcube/${arg2}`)
-						.setDescription(`https://www.cubetutor.com/viewcube/${arg2}\n\n :thinking: What's the pick? :thinking:`)
+						.setDescription(`:thinking: What's the pick? :thinking:\n\n${bonusQuestion}`)
 						.setThumbnail('https://www.cubetutor.com/assets/2.0.14-SNAPSHOT/app/pages/img/iconlogo.png')
 						.attachFiles([pack])
 						.setImage('attachment://pack.png');
@@ -70,14 +80,13 @@ module.exports = {
 				console.error(error);
 			}
 
-
 		} else if (arg1 === 'cc') {
 			try {
 				const ranNo = Math.floor(Math.random() * 9999999) + 1;
 				messageEmbed
-					.setTitle(`${arg2}`)
+					.setTitle(`${arg2}@Cube Cobra`)
 					.setURL(`https://cubecobra.com/cube/list/${arg2}`)
-					.setDescription(`https://cubecobra.com/cube/list/${arg2}\n\n :thinking: What's the pick? :thinking:`)
+					.setDescription(`:thinking: What's the pick? :thinking:\n\n${bonusQuestion}`)
 					.setThumbnail('http://cubecobra.com/content/sticker.png')
 					.setImage(`https://cubecobra.com/cube/samplepackimage/${arg2}/161076${ranNo}`);
 				await message.channel.send(messageEmbed);
