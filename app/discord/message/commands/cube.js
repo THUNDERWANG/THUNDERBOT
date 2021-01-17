@@ -112,7 +112,8 @@ module.exports = {
 					if (cubes.length === 0) return message.channel.send(`${arg} has not set any cubes!`, { users: [] });
 					const reply = new Discord.MessageEmbed()
 						.setColor(message.guild.members.cache.get(id).roles.highest.color)
-						.setTitle(`${discordTag}'s Cubes`);
+						.setTitle(`${discordTag}'s Cubes`)
+						.setThumbnail(message.author.avatarURL());
 					cubes.forEach((cube, index) => {
 						if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
 					});
