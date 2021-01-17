@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "canvas": "^2.6.1",
     "config": "^3.3.3",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "googleapis": "^66.0.0",
     "mysql2": "^2.2.5",
+    "node-fetch": "^2.6.1",
+    "node-html-parser": "^2.0.2",
     "sequelize": "^5.22.3"
   },
   "devDependencies": {
