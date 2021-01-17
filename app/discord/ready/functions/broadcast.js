@@ -8,5 +8,5 @@ module.exports = client => {
 		} catch (error) {
 			console.error(error);
 		}
-	}, 345600000);
+	}, 172800000);
 };
