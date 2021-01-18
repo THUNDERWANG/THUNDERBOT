@@ -65,7 +65,7 @@ module.exports = {
 					if (err) throw new Error('could not buffer canvas');
 					const pack = new Discord.MessageAttachment(buff).setName('pack.png');
 					messageEmbed
-						.setTitle(`${arg2} @Cube Tutor`)
+						.setTitle(`${arg2}@Cube Tutor`)
 						.setURL(`https://www.cubetutor.com/viewcube/${arg2}`)
 						.setDescription(`:thinking: What's the pick? :thinking:\n\n${bonusQuestion}`)
 						.setThumbnail('https://www.cubetutor.com/assets/2.0.14-SNAPSHOT/app/pages/img/iconlogo.png')
@@ -82,13 +82,21 @@ module.exports = {
 
 		} else if (arg1 === 'cc') {
 			try {
-				const ranNo = Math.floor(Math.random() * 9999999) + 1;
+				const ccResp = await fetch(`https://cubecobra.com/cube/samplepack/${arg2}`);
+				const html = await ccResp.text();
+				const htmlObj = await parse(html);
+				const elements = htmlObj.querySelectorAll('meta');
+				const pack = elements.reduce((answer, element) => {
+					const property = element.rawAttrs;
+					if (property.startsWith('property="og:image"')) answer = property.slice(property.indexOf('http'), -1);
+					return answer;
+				}, '');
 				messageEmbed
 					.setTitle(`${arg2}@Cube Cobra`)
 					.setURL(`https://cubecobra.com/cube/list/${arg2}`)
 					.setDescription(`:thinking: What's the pick? :thinking:\n\n${bonusQuestion}`)
 					.setThumbnail('http://cubecobra.com/content/sticker.png')
-					.setImage(`https://cubecobra.com/cube/samplepackimage/${arg2}/161076${ranNo}`);
+					.setImage(pack);
 				await message.channel.send(messageEmbed);
 			} catch (error) {
 				await message.channel.send('something went wrong!');
