@@ -9,7 +9,7 @@ module.exports = {
 	aliases: ['pack'],
 	usage: '[your Cube Cobra cube id]',
 	args: true,
-	cooldown: 0,
+	cooldown: 5,
 	guildOnly: true,
 	async execute(message, args) {
 		const [arg1, arg2] = args;
@@ -81,23 +81,22 @@ module.exports = {
 			}
 
 		} else if (arg1 === 'cc') {
+
 			try {
-				const ccResp = await fetch(`https://cubecobra.com/cube/samplepack/${arg2}`);
-				const html = await ccResp.text();
-				const htmlObj = await parse(html);
-				const elements = htmlObj.querySelectorAll('meta');
-				const pack = elements.reduce((answer, element) => {
-					const property = element.rawAttrs;
-					if (property.startsWith('property="og:image"')) answer = property.slice(property.indexOf('http'), -1);
-					return answer;
-				}, '');
+				const fetching = await message.channel.send('generating pack...');
+				const random = Math.floor(Math.random() * 9999999999) + 1;
+				const response = await fetch(`https://cubecobra.com/cube/samplepackimage/${arg2}/161${random}`);
+				const buffer = await response.buffer();
+				const pack = new Discord.MessageAttachment(buffer).setName('pack.png');
 				messageEmbed
 					.setTitle(`${arg2}@Cube Cobra`)
-					.setURL(`https://cubecobra.com/cube/list/${arg2}`)
+					.setURL(`https://www.cubetutor.com/viewcube/${arg2}`)
 					.setDescription(`:thinking: What's the pick? :thinking:\n\n${bonusQuestion}`)
 					.setThumbnail('http://cubecobra.com/content/sticker.png')
-					.setImage(pack);
+					.attachFiles([pack])
+					.setImage('attachment://pack.png');
 				await message.channel.send(messageEmbed);
+				await fetching.delete();
 			} catch (error) {
 				await message.channel.send('something went wrong!');
 				console.error(error);
@@ -108,14 +107,3 @@ module.exports = {
 		}
 	},
 };
-
-
-// const pack = new Discord.MessageAttachment(`https://cubecobra.com/cube/samplepackimage/${arg2}/161076${ranNo}`).setName('pack.png');
-// messageEmbed
-// 	.setTitle(`${arg2}`)
-// 	.setURL(`https://www.cubetutor.com/viewcube/${arg2}`)
-// 	.setDescription(`https://www.cubetutor.com/viewcube/${arg2}\n\n :thinking: What's the pick? :thinking:`)
-// 	.setThumbnail('https://www.cubetutor.com/assets/2.0.14-SNAPSHOT/app/pages/img/iconlogo.png')
-// 	.attachFiles([pack])
-// 	.setImage('attachment://pack.png');
-// await message.channel.send(messageEmbed);
