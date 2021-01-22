@@ -5,7 +5,7 @@ const { createCanvas, loadImage } = require('canvas');
 
 module.exports = {
 	name: 'p1p1',
-	description: 'generate random pack from Cube Cobra',
+	description: 'generate random pack from Cube Cobra/Tutor',
 	aliases: ['pack'],
 	usage: 'cc [Cube Cobra id] or ct [Cube Tutor id]',
 	args: true,
