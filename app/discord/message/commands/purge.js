@@ -2,7 +2,7 @@ module.exports = {
 	name: 'purge',
 	args: true,
 	cooldown: 2,
-	usage: ['[number'],
+	usage: ['[number]'],
 	modOnly: true,
 	description: 'remove messages',
 	async execute(message, args) {

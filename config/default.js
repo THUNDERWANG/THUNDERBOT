@@ -2,13 +2,17 @@ require('dotenv').config();
 
 module.exports = {
 	Discord: {
-		botId: process.env.DISCORD_BOT_ID_DEV,
-		botToken: process.env.DISCORD_BOT_TOKEN_DEV,
+		botId: process.env.DEV_DISCORD_BOT_ID,
+		botToken: process.env.DEV_DISCORD_BOT_TOKEN,
 		botPrefix: process.env.DISCORD_BOT_PREFIX,
 		modId: '795506335721717760',
 		triceId: '796164469738831872',
 		xmageId: '796164518115541012',
 		cubeChatId: '794675408570023940',
+		cubeMtgaWebhookId: process.env.DEV_MTGA_WEBHOOK_ID,
+		cubeMtgaWebhookToken: process.env.DEV_MTGA_WEBHOOK_TOKEN,
+		syndicateMTGAWebhookId: process.env.SYNDICATE_MTGA_WEBHOOK_ID,
+		syndicateMTGAWebhookToken: process.env.SYNDICATE_MTGA_WEBHOOK_TOKEN,
 	},
 	Sheets: {
 		email: process.env.GOOGLE_CLIENT_EMAIL,

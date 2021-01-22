@@ -5,7 +5,7 @@ module.exports = {
 	args: true,
 	cooldown: 1,
 	usage: ['[add <role>], [remove <role>]'],
-	description: 'adds xmage/cockatrice role',
+	description: 'add/remove xmage/cockatrice role',
 	async execute(message, args) {
 		try {
 			if (args[0] === 'add') {

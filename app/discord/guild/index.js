@@ -1,7 +1,8 @@
-const germify = require('./functions/germify.js');
-const welcome = require('./functions/welcome.js');
+const germify = require('./germify.js');
+const welcome = require('./welcome.js');
 
-module.exports = {
-	germify,
-	welcome,
-};
+module.exports = discordClient =>
+	discordClient.on('guildMemberAdd', member => {
+		germify(member);
+		welcome(member);
+	});

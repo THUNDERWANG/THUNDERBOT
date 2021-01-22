@@ -1,9 +1,9 @@
 module.exports = {
 	name: 'data',
-	description: 'brings up the link to the 3-0 data',
+	description: 'retrieve the 3-0 data',
 	async execute(message) {
 		try {
-			await message.channel.send('http://data.cube.pizza');
+			await message.channel.send(':pizza: http://data.cube.pizza :pizza:');
 		} catch (error) {
 			console.error(error);
 		}

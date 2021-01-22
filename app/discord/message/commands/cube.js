@@ -5,13 +5,13 @@ module.exports = {
 	name: 'cube',
 	args: true,
 	cooldown: 2,
-	usage: ['[add], [delete], [me], [<@tag>]'],
+	usage: ['[add], [delete], [me], [@tag]'],
 	description: 'add/remove a cube link',
 	async execute(message, args) {
 
 		try {
 			const arg = args[0];
-			const domains = ['cubetutor.com', 'cubecobra.com'];
+			const domains = ['www.cubetutor.com', 'www.cubecobra.com'];
 			const maxSlots = 5;
 
 			if (arg === 'me') {
@@ -48,6 +48,7 @@ module.exports = {
 						if (input.author.id !== message.author.id) return false;
 						if (inputURL === 'cancel' || inputURL.startsWith('.cube')) return true;
 						if (!domains.includes(new URL(inputURL).hostname)) throw new Error('Wrong domain');
+						// new URL() will throw an error if the url isn't valid
 						return true;
 					} catch (error) {
 						let reply = '**URL not valid. Try again.**';

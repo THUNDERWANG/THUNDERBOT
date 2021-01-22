@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { botId, botPrefix } = require('config').Discord;
+const { botId, botPrefix, modId } = require('config').Discord;
 
 module.exports = {
 	name: 'help',
@@ -11,10 +11,14 @@ module.exports = {
 		try {
 			const messageEmbed = new Discord.MessageEmbed()
 				.setColor(message.guild.roles.cache.get(botId).color)
-				.setTitle('Commands');
-			message.client.commands.forEach(command => {
-				const name = `${botPrefix}${command.name}`;
-				const value = command.modOnly ? `(mod only) ${command.description}` : `${command.description}`;
+				.setTitle('__Commands__')
+				.setDescription('Feel free to ping a mod for more help!')
+				.setThumbnail('https://i.imgur.com/IxuDER2.jpeg');
+			message.commands.forEach(command => {
+				if (!message.member.roles.cache.has(modId) && command.modOnly) return;
+				let name = `${botPrefix}${command.name}`;
+				if (command.usage) name += ` ${command.usage}`;
+				const value = `${command.description}`;
 				messageEmbed.addFields(
 					{ name: name, value: value });
 			});

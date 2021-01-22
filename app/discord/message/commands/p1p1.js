@@ -7,7 +7,7 @@ module.exports = {
 	name: 'p1p1',
 	description: 'generate random pack from Cube Cobra',
 	aliases: ['pack'],
-	usage: '[your Cube Cobra cube id]',
+	usage: 'cc [Cube Cobra id] or ct [Cube Tutor id]',
 	args: true,
 	cooldown: 5,
 	guildOnly: true,
@@ -81,13 +81,10 @@ module.exports = {
 			}
 
 		} else if (arg1 === 'cc') {
-
 			try {
 				const fetching = await message.channel.send('generating pack...');
 				const random = Math.floor(Math.random() * 9999999999) + 1;
-				const response = await fetch(`https://cubecobra.com/cube/samplepackimage/${arg2}/161${random}`);
-				const buffer = await response.buffer();
-				const pack = new Discord.MessageAttachment(buffer).setName('pack.png');
+				const pack = new Discord.MessageAttachment(`https://cubecobra.com/cube/samplepackimage/${arg2}/161${random}`).setName('pack.png');
 				messageEmbed
 					.setTitle(`${arg2}@Cube Cobra`)
 					.setURL(`https://www.cubetutor.com/viewcube/${arg2}`)

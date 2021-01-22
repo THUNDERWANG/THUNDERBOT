@@ -1,6 +1,9 @@
 const Discord = require('discord.js');
 
-module.exports = (command, message, cooldowns) => {
+const cooldowns = new Discord.Collection();
+
+module.exports = checkParams => {
+	const { command, message } = checkParams;
 	if (!cooldowns.has(command.name)) {
 		cooldowns.set(command.name, new Discord.Collection());
 	}

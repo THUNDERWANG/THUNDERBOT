@@ -1,6 +1,6 @@
 const tiers = require('config').Levels.tiers;
 
-module.exports.findRoles = points => {
+module.exports = points => {
 	const thresholds = Object.keys(tiers).reverse();
 	const levels = {};
 	// fix here

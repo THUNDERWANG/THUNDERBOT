@@ -4,7 +4,7 @@ module.exports = {
 	args: true,
 	usage: ['[d100 or 3d100]'],
 	cooldown: 3,
-	description: 'generate a number from 1-X',
+	description: 'generate a number from 1-100',
 	async execute(message, args) {
 
 		function roll(arg) {
@@ -25,7 +25,7 @@ module.exports = {
 			if (args.length > 1) return;
 			let reply = 'Invalid argument. The max number of rolls is 10 and the max die size is 100. Try .roll d100 or .roll 3d100';
 			const numbers = roll(args[0]);
-			if (numbers) reply = `you rolled ${numbers}`;
+			if (numbers) reply = `:game_die: ${message.author} rolled ${numbers} :game_die: `;
 			await message.channel.send(reply, { allowedMentions: { parse: [] } });
 		} catch (error) {
 			message.channel.send('something went wrong!');
