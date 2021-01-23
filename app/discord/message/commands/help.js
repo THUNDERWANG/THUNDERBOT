@@ -10,7 +10,7 @@ module.exports = {
 	execute(message) {
 		try {
 			const messageEmbed = new Discord.MessageEmbed()
-				.setColor(message.guild.roles.cache.get(botId).color)
+				.setColor(message.guild.members.cache.get(botId).roles.highest.color)
 				.setTitle('__Commands__')
 				.setDescription('Feel free to ping a mod for more help!')
 				.setThumbnail('https://i.imgur.com/IxuDER2.jpeg');

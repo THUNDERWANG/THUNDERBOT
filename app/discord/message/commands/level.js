@@ -25,7 +25,7 @@ module.exports = {
 					descrip + `<@&${tiers.get(threshold).id}> | ${threshold}+ wins \n\n`
 				), '');
 				const messageEmbed = new Discord.MessageEmbed()
-					.setColor(message.guild.roles.cache.get(botId).color)
+					.setColor(message.guild.members.cache.get(botId).roles.highest.color)
 					.setTitle('__Tiers__ \n\n')
 					.setThumbnail('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/3/4/3462a3d0-5552-49fa-9eb7-100960c55891.jpg?1610070177')
 					.setDescription(description);

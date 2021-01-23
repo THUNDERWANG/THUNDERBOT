@@ -12,7 +12,7 @@ module.exports = async message => {
 		const images = media.split(',');
 		const dealImage = images.shift();
 		const messageEmbed = new Discord.MessageEmbed()
-			.setColor(message.guild.roles.cache.get(botId).color)
+			.setColor(message.guild.members.cache.get(botId).roles.highest.color)
 			.setTitle(':trumpet: MTGA Daily Deal :trumpet:')
 			.setDescription(comment)
 			.setThumbnail('https://pbs.twimg.com/profile_images/1338516635661918208/N2oDUhgY_400x400.jpg')
@@ -26,7 +26,7 @@ module.exports = async message => {
 		// attach more deal images if necessary
 		const extraDeals = images.map(deal => {
 			return new Discord.MessageEmbed()
-				.setColor(message.guild.roles.cache.get(botId).color)
+				.setColor(message.guild.members.cache.get(botId).roles.highest.color)
 				.setImage(deal);
 		});
 
