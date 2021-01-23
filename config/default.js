@@ -9,10 +9,7 @@ module.exports = {
 		triceId: '796164469738831872',
 		xmageId: '796164518115541012',
 		cubeChatId: '794675408570023940',
-		cubeMtgaWebhookId: process.env.DEV_MTGA_WEBHOOK_ID,
-		cubeMtgaWebhookToken: process.env.DEV_MTGA_WEBHOOK_TOKEN,
-		syndicateMTGAWebhookId: process.env.SYNDICATE_MTGA_WEBHOOK_ID,
-		syndicateMTGAWebhookToken: process.env.SYNDICATE_MTGA_WEBHOOK_TOKEN,
+		mtgaChannelId: '801910605656096838',
 	},
 	Sheets: {
 		email: process.env.GOOGLE_CLIENT_EMAIL,

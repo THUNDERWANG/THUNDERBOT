@@ -10,8 +10,6 @@ module.exports = {
 		xmageId: '585313738169778177',
 		triceId: '585314755976364043',
 		cubeChatId: '306902973706141708',
-		cubeMtgaWebhookId: process.env.CUBE_MTGA_WEBHOOK_ID,
-		cubeMtgaWebhookToken: process.env.CUBE_MTGA_WEBHOOK_TOKEN,
 	},
 	Database: {
 		url: process.env.CLEARDB_DATABASE_URL,
