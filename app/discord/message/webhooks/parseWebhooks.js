@@ -13,7 +13,7 @@ module.exports = async message => {
 		const dealImage = images.shift();
 		const messageEmbed = new Discord.MessageEmbed()
 			.setColor(message.guild.members.cache.get(botId).roles.highest.color)
-			.setTitle(':trumpet: MTGA Daily Deal :trumpet:')
+			.setTitle(':mega: MTGA Daily Deal :mega:')
 			.setDescription(comment)
 			.setThumbnail('https://pbs.twimg.com/profile_images/1338516635661918208/N2oDUhgY_400x400.jpg')
 			.setURL(tweetURL)
