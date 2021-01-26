@@ -88,7 +88,7 @@ module.exports = {
 						if (int && int > 0 && int <= cubes.length) {
 							return true;
 						}
-						message.channel.send(`<@${message.author.id}> did not select a valid choice`, { allowedMentions: { parse: [] } });
+						message.channel.send(`<@${message.author.id}> did not select a valid choice. Try another number.`, { allowedMentions: { parse: [] } });
 					}
 				};
 				const collectorChoice = await message.channel.awaitMessages(filterChoice, { max: 1, time: 10000, dispose: true, errors: ['time'] });
