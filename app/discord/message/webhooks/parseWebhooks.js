@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { mtgaChannelId, botId } = require('config').Discord;
+const { onlineCubeDraftsServerId, mtgaDailyDealChannelId, botId } = require('config').Discord;
 
 module.exports = async message => {
 	try {
@@ -19,8 +19,9 @@ module.exports = async message => {
 			.setURL(tweetURL)
 			.setImage(dealImage);
 
-		const mtgaChannel = message.guild.channels.cache.get(mtgaChannelId);
-		const firstEmbed = await mtgaChannel.send(messageEmbed);
+		const onlineCubeDrafts = await message.client.guilds.fetch(onlineCubeDraftsServerId);
+		const mtgaDailyDealChannel = onlineCubeDrafts.channels.cache.get(mtgaDailyDealChannelId);
+		const firstEmbed = await mtgaDailyDealChannel.send(messageEmbed);
 		await firstEmbed.crosspost();
 
 		// attach more deal images if necessary
@@ -31,8 +32,8 @@ module.exports = async message => {
 		});
 
 		for (let i = 0;i < extraDeals.length;i++) {
-			const extraMessage = await mtgaChannel.send(extraDeals[i]);
-			await extraMessage.crosspost();
+			const extraEmbeds = await mtgaDailyDealChannel.send(extraDeals[i]);
+			await extraEmbeds.crosspost();
 		}
 
 	} catch (error) {

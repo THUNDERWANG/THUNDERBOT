@@ -10,6 +10,8 @@ module.exports = {
 		xmageId: '796164518115541012',
 		cubeChatId: '794675408570023940',
 		mtgaChannelId: '801910605656096838',
+		onlineCubeDraftsServerId: '794675408570023937', // dev tgc channel
+		mtgaDailyDealChannelId: '801910605656096838', // dev mtga channel
 	},
 	Sheets: {
 		email: process.env.GOOGLE_CLIENT_EMAIL,

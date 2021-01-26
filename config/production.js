@@ -10,6 +10,8 @@ module.exports = {
 		xmageId: '585313738169778177',
 		triceId: '585314755976364043',
 		cubeChatId: '306902973706141708',
+		onlineCubeDraftsServerId: '306902973706141708',
+		mtgaDailyDealChannelId: '801525594520682536',
 	},
 	Database: {
 		url: process.env.CLEARDB_DATABASE_URL,
