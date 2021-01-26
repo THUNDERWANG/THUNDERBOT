@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
 const configs = require('config');
-const onReady = require('./app/discord/ready/index.js');
-const onGuild = require('./app/discord/guild/index.js');
-const onMessage = require('./app/discord/message/index.js');
+const onReady = require('./app/discord/ready/onReady.js');
+const onGuild = require('./app/discord/guild/onGuild.js');
+const onMessage = require('./app/discord/message/onMessage.js');
 
 const discordClient = new Discord.Client();
 
