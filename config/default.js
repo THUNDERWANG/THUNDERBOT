@@ -8,7 +8,7 @@ module.exports = {
 		modId: '795506335721717760',
 		triceId: '796164469738831872',
 		xmageId: '796164518115541012',
-		cubeChatId: '794675408570023940',
+		cubeChatId: '802301626588201010',
 		mtgaChannelId: '801910605656096838',
 		onlineCubeDraftsServerId: '794675408570023937', // dev tgc channel
 		mtgaDailyDealChannelId: '801910605656096838', // dev mtga channel
