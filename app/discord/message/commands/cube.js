@@ -8,12 +8,11 @@ module.exports = {
 	usage: ['[add], [delete], [me], [@tag]'],
 	description: 'add/remove a cube link',
 	async execute(message, args) {
-
 		try {
-			const arg = args[0];
-			const domains = ['cubetutor.com', 'cubecobra.com'];
+			if (args.length > 1) return; // prevents people from using .cube add <cube name>--will turn into a onMessage check in the future
 			const maxSlots = 5;
-
+			const domains = ['cubetutor.com', 'cubecobra.com'];
+			const arg = args[0];
 			if (arg === 'me') {
 				const response = await db.cubes.findAll({ where: { discordTag: message.author.tag } });
 				const cubes = JSON.parse(JSON.stringify(response));
@@ -23,7 +22,7 @@ module.exports = {
 					.setTitle(`${message.author.tag}'s Cubes`)
 					.setThumbnail(message.author.avatarURL());
 				cubes.forEach((cube, index) => {
-					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
+					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value: cube.link });
 				});
 				message.channel.send(reply);
 
@@ -34,14 +33,14 @@ module.exports = {
 				});
 				const user = response[0].toJSON();
 				if (user.cubes && user.cubes.length >= maxSlots) return await message.channel.send(`<@${message.author.id}> has no more open slots!`, { allowedMentions: { parse: [] } });
-				await message.channel.send('**Enter cube name or *cancel* **');
+				await message.channel.send('**Enter __cube name__ or *cancel* **');
 				const filterName = input => input.author.id === message.author.id;
 				const collectorName = await message.channel.awaitMessages(filterName, { max: 1, time: 45000, errors: ['time'] });
 				const inputName = collectorName.first().content.toLowerCase();
 				if (inputName === 'cancel' || inputName.startsWith('.cube')) {
 					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
 				}
-				await message.channel.send('**Enter cube URL or *cancel* **');
+				await message.channel.send('**Enter __cube URL__ or *cancel* **');
 				const filterURL = input => {
 					try {
 						const inputURL = input.content.toLowerCase();
@@ -62,20 +61,20 @@ module.exports = {
 				if (inputURL === 'cancel' || inputURL.startsWith('.cube')) {
 					return await message.channel.send(`<@${message.author.id}> has cancelled`, { allowedMentions: { parse: [] } });
 				}
-				await db.cubes.create({ name:collectorName.first().content, link: collectorURL.first().content, discordTag: user.discordTag, userId: user.id });
+				await db.cubes.create({ name: collectorName.first().content, link: collectorURL.first().content, discordTag: user.discordTag, userId: user.id });
 				await message.channel.send(`<@${message.author.id}> has added **${collectorName.first().content}**`, { allowedMentions: { parse: [] } });
 
 			} else if (args[0] === 'delete' || args[0] === 'remove') {
 				const response = await db.cubes.findAll({ where: { discordTag: message.author.tag } });
 				const cubes = JSON.parse(JSON.stringify(response));
 				if (cubes.length === 0) return message.channel.send(`<@${message.author.id}> has not set any cubes!`, { allowedMentions: { parse: [] } });
-				await message.channel.send('**Enter number or *cancel* **');
+				await message.channel.send('**Enter __number__ or *cancel* **');
 				const reply = new Discord.MessageEmbed()
 					.setColor(message.member.roles.highest.color)
 					.setTitle(`${message.author.tag}'s Cubes`)
 					.setThumbnail(message.author.avatarURL());
 				cubes.forEach((cube, index) => {
-					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
+					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value: cube.link });
 				});
 				message.reply(reply);
 				const filterChoice = input => {
@@ -101,36 +100,39 @@ module.exports = {
 				await message.channel.send(`<@${message.author.id}> has deleted **${cubes[deleteIndex].name}**`, { allowedMentions: { parse: [] } });
 
 			} else if (arg.startsWith('<@') && arg.endsWith('>')) {
-				let discordTag = null;
-				let id = arg.slice(2, -1);
-				if (id.startsWith('!')) {
-					id = id.slice(1);
-					discordTag = message.guild.members.cache.get(id).user.tag;
+				// mentioning users on mobile uses a different syntax than mentioning on a computer, it seems
+				// mobile ex. <@801556487038173214>
+				// computer ex. <@!801556487038173214> (notice the !)
+				let userId = null;
+				if (arg.startsWith('<@!')) {
+					userId = arg.slice(3, -1);
+				} else {
+					userId = arg.slice(2, -1);
 				}
-				if (discordTag) {
-					const response = await db.cubes.findAll({ where: { discordTag: discordTag } });
-					const cubes = JSON.parse(JSON.stringify(response));
-					if (cubes.length === 0) return message.channel.send(`${arg} has not set any cubes!`, { users: [] });
-					const reply = new Discord.MessageEmbed()
-						.setColor(message.guild.members.cache.get(id).roles.highest.color)
-						.setTitle(`${discordTag}'s Cubes`)
-						.setThumbnail(message.guild.members.cache.get(id).user.avatarURL());
-					cubes.forEach((cube, index) => {
-						if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value:cube.link });
-					});
-					message.channel.send(reply);
-				}
+				const member = message.guild.members.cache.get(userId);
+				if (!member) return await message.channel.send('Member not found');
+				const response = await db.cubes.findAll({ where: { discordTag: member.user.tag } });
+				const cubes = JSON.parse(JSON.stringify(response));
+				if (cubes.length === 0) return message.channel.send(`${arg} has not set any cubes!`, { users: [] });
+				const reply = new Discord.MessageEmbed()
+					.setColor(message.guild.members.cache.get(userId).roles.highest.color)
+					.setTitle(`${member.user.tag}'s Cubes`)
+					.setThumbnail(message.guild.members.cache.get(userId).user.avatarURL());
+				cubes.forEach((cube, index) => {
+					if (cube) reply.addFields({ name: `${index + 1}. ${cube.name}`, value: cube.link });
+				});
+				await message.channel.send(reply);
 			}
+
 		} catch (error) {
 			let reply = `<@${message.author.id}>, something went wrong`;
 			if (error.name === 'SequelizeUniqueConstraintError') {
 				reply = `<@${message.author.id}>'s tag already exists`;
 				console.error(error.toString());
-			} else if (!error.size) {
-				reply = `<@${message.author.id}> has timed out.`;
+			} else if (error.size === 0) { // when the collector times out, it throws a Discord collection that extends Map
+				reply = `<@${message.author.id}>'s connection has timed out. Please start over.`;
 			}
 			message.channel.send(reply, { allowedMentions: { parse: [] } });
 		}
-
 	},
 };
