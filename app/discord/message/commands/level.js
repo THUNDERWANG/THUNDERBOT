@@ -61,7 +61,7 @@ module.exports = {
 					return await message.channel.send(messageEmbed);
 				}
 				const { current } = findRoles(user.points);
-				await message.channel.send(`<@${message.author.id}> now has **${points}** points. :confetti_ball:`, { allowedMentions: { parse: [] } });
+				await message.channel.send(`:confetti_ball: <@${message.author.id}> now has **${points}** points! :confetti_ball:`, { allowedMentions: { parse: [] } });
 				await message.member.roles.add(current);
 
 			} else if (arg === 'down') {
