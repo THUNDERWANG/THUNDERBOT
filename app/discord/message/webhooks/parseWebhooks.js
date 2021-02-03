@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { onlineCubeDraftsServerId, mtgaDailyDealChannelId, botId } = require('config').Discord;
+const { onlineCubeDraftsServerId, mtgaDailyDealChannelId } = require('config').Discord;
 const { loadImage } = require('canvas');
 
 module.exports = async message => {
@@ -26,8 +26,7 @@ module.exports = async message => {
 
 		// send first image
 		const messageEmbed = new Discord.MessageEmbed()
-			.setColor(message.guild.members.cache.get(botId).roles.highest.color)
-			.setTitle(':mega: Daily Deal :mega:')
+			.setColor('#1DA1F2')
 			.setAuthor('@ArenaDailyDeal', profilePic, tweetURL)
 			.setDescription(comment)
 			.setThumbnail('https://i.imgur.com/7tVYAeF.png')
@@ -40,7 +39,7 @@ module.exports = async message => {
 		// send the rest of the images in separate new embed messages
 		for (const extraImage of images) {
 			const discordEmbed = new Discord.MessageEmbed()
-				.setColor(message.guild.members.cache.get(botId).roles.highest.color)
+				.setColor('#1DA1F2')
 				.setImage(extraImage.url);
 			const extraEmbeds = await mtgaDailyDealChannel.send(discordEmbed);
 			await extraEmbeds.crosspost();
