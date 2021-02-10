@@ -3,11 +3,12 @@
   "version": "2.0.0",
   "description": "",
   "engines": {
-	"node": "15.x",
-	"npm": "7.x"
+    "node": "15.x",
+    "npm": "7.5.1"
   },
   "main": "index.js",
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.0",
     "canvas": "^2.6.1",
     "config": "^3.3.3",
     "discord.js": "^12.5.1",
