@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const { serverId, mtgaDealChannel } = require('config').discord;
 const { loadImage } = require('canvas');
 const winston = require('winston');
+const { zapier } = require('config').discord;
 
 /**
  * The message will be sent to a private discord channel with @@@@@ as delimiters. Parse from there.
@@ -15,7 +16,7 @@ const winston = require('winston');
 
 module.exports = async message => {
 	try {
-		if (message.author.username !== 'MTGA Daily Deal' && !message.webHookID && !message.content.toLowerCase().includes('here are')) return;
+		if (message.author.id !== zapier && !message.content.toLowerCase().includes('here are')) return;
 		const onlineCubeDrafts = await message.client.guilds.fetch(serverId);
 		const mtgaDailyDealChannel = onlineCubeDrafts.channels.cache.get(mtgaDealChannel);
 

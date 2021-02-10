@@ -14,6 +14,7 @@ module.exports = {
 		welcomeChannel: '802301626588201010',
 		serverId: '794675408570023937', // dev tgc server by default
 		mtgaDealChannel: '801910605656096838', // only available on dev tgc server only
+		zapier: '802369375432736788',
 	},
 	database: {
 		url: 'mongodb://localhost/the-grand-calcutron',
