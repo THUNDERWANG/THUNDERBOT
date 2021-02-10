@@ -3,8 +3,13 @@
   "version": "2.0.0",
   "description": "",
   "engines": {
+<<<<<<< HEAD
     "node": "15.x",
     "npm": "7.5.1"
+=======
+	"node": "15.x",
+	"npm": "7.5.1"
+>>>>>>> a70d257c098504d2e3e8702ef082aa4f71ac0bc7
   },
   "main": "index.js",
   "dependencies": {
