@@ -4,4 +4,5 @@ To contact THUNDERWANG, join the discord link: https://discord.gg/4eHADtb
 Instructions:
 1. Create a .env file using .env.example
 2. Update configs with the appropriate IDs--use only default config if there is no development Discord server.
-3. To add new commands, look in app\discord\message\commands\example template.
+3. Webhook will not work without another server/channel, so make a dedicated channel to parse the input if needed.
+3. To add new commands, use app\discord\handlers\message\commands\example as a template.

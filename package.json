@@ -1,6 +1,6 @@
 {
-  "name": "bot",
-  "version": "1.0.0",
+  "name": "the-grand-calcutron",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -8,20 +8,18 @@
     "config": "^3.3.3",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "googleapis": "^66.0.0",
-    "mysql2": "^2.2.5",
+    "joi": "^17.3.0",
+    "mongoose": "^5.11.15",
     "node-fetch": "^2.6.1",
-    "node-html-parser": "^2.0.2",
-    "sequelize": "^5.22.3"
+    "node-html-parser": "^2.0.2"
   },
   "devDependencies": {
     "eslint": "^7.16.0",
-    "nodemon": "^2.0.6",
-    "sqlite3": "^5.0.0"
+    "nodemon": "^2.0.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",

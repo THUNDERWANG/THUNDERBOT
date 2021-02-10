@@ -1,0 +1,13 @@
+module.exports = {
+	name: 'greet', // required!
+	description: 'greets the user',
+	aliases: ['welcome, hello'],
+	args: true,
+	usage: '[@username]', // if arguments are true, then these are the valid arguments
+	cooldown: 5,
+	guildOnly: true,
+	modOnly: true,
+	async execute(message, args) {
+		// code body
+	},
+};
