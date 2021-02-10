@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+	"node": "15.x"
+  },
   "dependencies": {
     "canvas": "^2.6.1",
     "config": "^3.3.3",
