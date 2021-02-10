@@ -8,6 +8,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.0",
     "canvas": "^2.6.1",
     "config": "^3.3.3",
     "discord.js": "^12.5.1",
