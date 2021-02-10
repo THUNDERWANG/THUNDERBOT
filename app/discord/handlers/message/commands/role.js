@@ -1,9 +1,11 @@
 const { xmageRole, triceRole } = require('config').discord;
+const winston = require('winston');
 
 module.exports = {
 	name: 'role',
 	args: true,
-	cooldown: 1,
+	cooldown: 2,
+	guildOnly: true,
 	usage: ['[add <role>], [remove <role>]'],
 	description: 'add/remove xmage/cockatrice role',
 	async execute(message, args) {
@@ -26,7 +28,7 @@ module.exports = {
 				}
 			}
 		} catch (error) {
-			console.error(error);
+			winston.error(error);
 		}
 	},
 };

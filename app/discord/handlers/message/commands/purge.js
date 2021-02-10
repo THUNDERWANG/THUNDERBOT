@@ -1,9 +1,12 @@
+const winston = require('winston');
+
 module.exports = {
 	name: 'purge',
 	args: true,
 	cooldown: 2,
 	usage: ['[number]'],
 	modOnly: true,
+	guildOnly: true,
 	description: 'remove messages',
 	async execute(message, args) {
 		try {
@@ -14,9 +17,9 @@ module.exports = {
 			if (arg > 20) {
 				return message.channel.send('20 messages is the limit per command');
 			}
-			message.channel.bulkDelete(arg + 1);
+			await message.channel.bulkDelete(arg + 1);
 		} catch (error) {
-			console.error(error);
+			winston.error(error);
 		}
 	},
 };

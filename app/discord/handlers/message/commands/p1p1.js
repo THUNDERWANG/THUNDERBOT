@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const fetch = require('node-fetch');
 const { parse } = require('node-html-parser');
 const { createCanvas, loadImage } = require('canvas');
+const winston = require('winston');
 
 module.exports = {
 	name: 'p1p1',
@@ -9,7 +10,7 @@ module.exports = {
 	aliases: ['pack'],
 	usage: 'cc [Cube Cobra id] or ct [Cube Tutor id]',
 	args: true,
-	cooldown: 5,
+	cooldown: 2,
 	guildOnly: true,
 	async execute(message, args) {
 		const [arg1, arg2] = args;
@@ -77,7 +78,7 @@ module.exports = {
 
 			} catch (error) {
 				message.channel.send('something went wrong!');
-				console.error(error);
+				winston.error(error);
 			}
 
 		} else if (arg1 === 'cc') {
@@ -96,7 +97,7 @@ module.exports = {
 				await fetching.delete();
 			} catch (error) {
 				await message.channel.send('something went wrong!');
-				console.error(error);
+				winston.error(error);
 			}
 
 		} else {

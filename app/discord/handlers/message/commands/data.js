@@ -1,3 +1,5 @@
+const winston = require('winston');
+
 module.exports = {
 	name: 'data',
 	description: 'retrieve the 3-0 data',
@@ -5,7 +7,7 @@ module.exports = {
 		try {
 			await message.channel.send(':pizza: http://data.cube.pizza :pizza:');
 		} catch (error) {
-			console.error(error);
+			winston.error(error);
 		}
 	},
 };

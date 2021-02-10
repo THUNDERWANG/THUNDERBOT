@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const { serverId, mtgaDealChannel } = require('config').discord;
 const { loadImage } = require('canvas');
+const winston = require('winston');
 
 /**
  * The message will be sent to a private discord channel with @@@@@ as delimiters. Parse from there.
@@ -53,6 +54,6 @@ module.exports = async message => {
 		}
 
 	} catch (error) {
-		console.error(error);
+		winston.error(error);
 	}
 };

@@ -1,3 +1,4 @@
+const winston = require('winston');
 const attachHelpers = require('./message/middleware/helpers/message.helpers.js');
 const checkArgs = require('./message/middleware/checks/checkArgs.js');
 const checkGuild = require('./message/middleware/checks/checkGuild.js');
@@ -41,7 +42,7 @@ module.exports = discordClient => {
 			command.execute(message, args);
 		} catch (error) {
 			if (error.message.match(/^check/)) return;
-			console.error(error);
+			winston.error(error);
 		}
 	});
 };

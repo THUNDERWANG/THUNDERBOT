@@ -40,8 +40,8 @@ function findLevel(points) {
 	}
 }
 
-function getDescrip() {
 // traverse linked list of levels and create description string
+function getDescrip() {
 	let current = linkedLevels;
 	let description = '';
 	while (current) {

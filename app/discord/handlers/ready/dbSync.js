@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { url } = require('config').database;
+const winston = require('winston');
 
 module.exports = () => {
 	mongoose.connect(url, {
@@ -8,5 +9,5 @@ module.exports = () => {
 		useCreateIndex: true,
 		useFindAndModify: false,
 	});
-	console.log('DB ready!');
+	winston.info('DB ready!');
 };

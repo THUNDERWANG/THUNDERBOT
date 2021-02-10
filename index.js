@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const { botToken } = require('config').discord;
 
+require('./app/logger/logger.js')();
 const discordClient = new Discord.Client();
 require('./app/discord/handlers/onReady.js')(discordClient);
 require('./app/discord/handlers/onGuild.js')(discordClient);

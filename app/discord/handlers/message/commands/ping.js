@@ -1,3 +1,5 @@
+const winston = require('winston');
+
 module.exports = {
 	name: 'ping',
 	aliases: ['lag'],
@@ -9,7 +11,7 @@ module.exports = {
 			const ping = reply.createdTimestamp - userSent;
 			reply.edit(`🏓 Bot latency: ${ping} ms 🏓`);
 		} catch (error) {
-			console.error(error);
+			winston.error(error);
 		}
 	},
 };

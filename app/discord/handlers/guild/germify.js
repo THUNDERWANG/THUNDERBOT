@@ -1,3 +1,4 @@
+const winston = require('winston');
 const { levels } = require('../../levels/levels.js');
 
 module.exports = async member => {
@@ -5,6 +6,6 @@ module.exports = async member => {
 		// levels is the head of the levels linked list
 		await member.roles.add(levels.id);
 	} catch(error) {
-		console.error(error);
+		winston.error(error);
 	}
 };

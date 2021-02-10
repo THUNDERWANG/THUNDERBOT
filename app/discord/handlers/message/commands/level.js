@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const { findLevel, getDescrip } = require('../../../levels/levels.js');
 const { botId } = require('config').discord;
 const User = require('../../../../database/models/user.model');
+const winston = require('winston');
 
 /**
  * ***READ THIS FIRST***
@@ -68,17 +69,21 @@ module.exports = {
 				await reply(`:confetti_ball: <@!${userId}> now has **${points}** points! :confetti_ball:`);
 
 			} else if (arg === 'down') {
-				let user = await User.findUser(userId);
+				const user = await User.findUser(userId);
 				if (!user || !user.points) return await replyToAuth('can not go below 0 points!');
 				user.points--;
-				user = await user.save();
+				await user.save();
 				const { points } = user;
 				const level = findLevel(points);
-				if (points === level.points) await message.member.roles.remove(level.next.id); // remove previous level if needed
+				// remove previous level
+				if (points === level.points) {
+					await message.member.roles.remove(level.next.id);
+				}
+
 				return await replyToAuth(`now has **${points}** points`);
 			}
 		} catch (error) {
-			console.error(error);
+			winston.error(error);
 			replyToAuth('Something went wrong!');
 		}
 	},

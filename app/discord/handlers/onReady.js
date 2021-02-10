@@ -1,4 +1,5 @@
 const fs = require('fs');
+const winston = require('winston');
 
 // load all handlers into an array
 const handlerFiles = fs.readdirSync('app/discord/handlers/ready').filter(file=>file.endsWith('.js'));
@@ -8,9 +9,9 @@ module.exports = discordClient => {
 	discordClient.once('ready', () => {
 		try {
 			handlers.forEach(handler=>handler());
-			console.log('Bzz, THUNDERBOT is ready!');
+			winston.info('Bzz, THUNDERBOT is ready!');
 		} catch(error) {
-			console.error(error);
+			winston.error(error);
 		}
 	});
 };

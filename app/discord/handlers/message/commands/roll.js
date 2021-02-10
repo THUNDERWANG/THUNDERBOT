@@ -1,9 +1,12 @@
+const winston = require('winston');
+
 module.exports = {
 	name: 'roll',
 	aliases: ['die', 'rng'],
 	args: true,
 	usage: ['[d100 or 3d100]'],
-	cooldown: 3,
+	guildOnly: true,
+	cooldown: 2,
 	description: 'generate a number from 1-100',
 	async execute(message, args) {
 
@@ -29,7 +32,7 @@ module.exports = {
 			await message.channel.send(reply, { allowedMentions: { parse: [] } });
 		} catch (error) {
 			message.channel.send('something went wrong!');
-			console.error(error);
+			winston.error(error);
 		}
 	},
 };

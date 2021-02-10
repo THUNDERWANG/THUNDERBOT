@@ -2,11 +2,13 @@ const Discord = require('discord.js');
 const User = require('../../../../database/models/user.model.js');
 const Joi = require('joi');
 const maxSlots = require('config').database;
+const winston = require('winston');
 
 module.exports = {
 	name: 'cube',
 	args: true,
 	cooldown: 2,
+	guildOnly: true,
 	usage: ['[add], [delete], [me], [@tag]'],
 	description: 'add/remove a cube link',
 	async execute(message, args) {
@@ -23,7 +25,7 @@ module.exports = {
 				const { cubes } = user;
 				if (cubes && cubes.length >= maxSlots) return await replyToAuth('has no more open slots!');
 
-				await reply(':pencil: **Enter __cube name__ or __cancel__** :pencil:');
+				await reply(':pencil: **Enter __cube name__ or __"cancel"__ ** :pencil:');
 
 				// input must be from same user
 				const filterName = input => input.author.id === message.author.id;
@@ -35,7 +37,7 @@ module.exports = {
 				const inputName = collectorName.first().content.trim();
 				if (inputName.toLowerCase() === 'cancel' || inputName.toLowerCase().startsWith('.cube')) return await replyToAuth('has cancelled');
 
-				await reply(':link: **Enter __cube URL__ or *cancel* ** :link:');
+				await reply(':link: **Enter __cube URL__ or __"cancel"__ ** :link:');
 
 				const filterURL = input => {
 					if (input.author.id !== message.author.id) return false;
@@ -68,7 +70,7 @@ module.exports = {
 				const { cubes } = user;
 
 				const embed = new Discord.MessageEmbed()
-					.setTitle(':1234: **Enter __number__ or *cancel* ** :1234:')
+					.setTitle(':1234: **Enter __number__ or __"cancel"__** :1234:')
 					.setColor(message.guild.members.cache.get(userId).roles.highest.color)
 					.setDescription(`**${discordTag}'s Cubes**`)
 					.setThumbnail(message.author.avatarURL());
@@ -102,6 +104,7 @@ module.exports = {
 			} else if (arg.startsWith('<@') && arg.endsWith('>')) {
 				// <@! is for nicknames
 				const targetId = (arg.startsWith('<@!')) ? arg.slice(3, -1) : arg.slice(2, -1);
+				if (!message.guild) await reply('you must be in the guild to retrieve cube data');
 				const member = message.guild.members.cache.get(targetId);
 				if (!member) {
 					return reply(`<@!${targetId}> could not be found in the guild!`);
@@ -128,7 +131,7 @@ module.exports = {
 		} catch (error) {
 			// when the collector times out, it throws a Discord collection that extends Map with size 0
 			if (error.size === 0) return replyToAuth('\'s connection has timed out. Please start over.');
-			console.error(error);
+			winston.error(error);
 			replyToAuth(', something went wrong :thinking:');
 		}
 	},

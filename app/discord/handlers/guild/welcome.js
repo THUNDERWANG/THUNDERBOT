@@ -1,3 +1,4 @@
+const winston = require('winston');
 const { welcomeChannel } = require('config').discord;
 
 module.exports = async member => {
@@ -18,6 +19,6 @@ module.exports = async member => {
 		const channel = member.guild.channels.cache.get(welcomeChannel);
 		await channel.send(welcomeMessage);
 	} catch(error) {
-		console.error(error);
+		winston.error(error);
 	}
 };

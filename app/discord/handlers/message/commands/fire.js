@@ -1,3 +1,5 @@
+const winston = require('winston');
+
 module.exports = {
 	name: 'fired',
 	aliases: ['fire'],
@@ -6,7 +8,7 @@ module.exports = {
 		try {
 			await message.channel.send('The draft has fired! Good luck and please save your decklists :pray:');
 		} catch (error) {
-			console.error(error);
+			winston.error(error);
 		}
 	},
 };

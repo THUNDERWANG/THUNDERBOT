@@ -1,3 +1,4 @@
+const winston = require('winston');
 const fs = require('fs');
 
 // load all handlers into an array
@@ -11,7 +12,7 @@ module.exports = discordClient => {
 		try{
 			handlers.forEach(handler => handler(member));
 		} catch(error) {
-			console.error(error);
+			winston.error(error);
 		}
 	});
 };
