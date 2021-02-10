@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { serverId, mtgaDealChannel } = require('config').discord;
+const { serverId, tgcChannel } = require('config').discord;
 const { loadImage } = require('canvas');
 const winston = require('winston');
 const { zapier } = require('config').discord;
@@ -18,7 +18,7 @@ module.exports = async message => {
 	try {
 		if (message.author.id !== zapier && !message.content.toLowerCase().includes('here are')) return;
 		const onlineCubeDrafts = await message.client.guilds.fetch(serverId);
-		const mtgaDailyDealChannel = onlineCubeDrafts.channels.cache.get(mtgaDealChannel);
+		const mtgaDailyDealChannel = onlineCubeDrafts.channels.cache.get(tgcChannel);
 
 		// parse message (see above for example)
 		const [tweet, profilePic, imageStrings] = message.content.split('@@@@@');

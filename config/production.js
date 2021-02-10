@@ -12,7 +12,7 @@ module.exports = {
 		cubeChatChannel: '306902973706141708',
 		welcomeChannel: '659117988405837832',
 		serverId: '306902973706141708', // Online Cube Drafts Server
-		mtgaDealChannel: '801525594520682536', // only available on dev tgc server only
+		tgcChannel: '802301350510592020', // production tgc channel
 	},
 	database: {
 		url: process.env.MONGO_URL,
