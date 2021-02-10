@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-	"node": "14.x"
+	"node": "15.x"
   },
   "dependencies": {
     "canvas": "^2.6.1",
