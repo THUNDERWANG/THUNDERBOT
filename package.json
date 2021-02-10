@@ -2,6 +2,10 @@
   "name": "the-grand-calcutron",
   "version": "2.0.0",
   "description": "",
+  "engines": {
+	"node": "15.x",
+	"npm": "7.x"
+  },
   "main": "index.js",
   "dependencies": {
     "canvas": "^2.6.1",
