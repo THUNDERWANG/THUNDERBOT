@@ -1,5 +1,5 @@
 This is the discord bot used in the Online Cube Drafts server and hosted via Heroku and utilizes MongoDB.
-Yuo can contact THUNDERWANG using the following discord link: https://discord.gg/4eHADtb
+You can contact THUNDERWANG using the following discord link: https://discord.gg/4eHADtb
 
 Instructions:
 1. Create a .env file using .env.example
