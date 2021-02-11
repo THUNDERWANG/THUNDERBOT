@@ -1,4 +1,4 @@
-This is the discord bot used in the Online Cube Drafts server and hosted via Heroku and uses mySQL.
+This is the discord bot used in the Online Cube Drafts server and hosted via Heroku and utilizes MongoDB.
 To contact THUNDERWANG, join the discord link: https://discord.gg/4eHADtb
 
 Instructions:
