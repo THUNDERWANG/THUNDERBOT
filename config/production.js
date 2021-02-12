@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
 	discord: {
+		// discord settings for Online Cube Drafts server
 		botId: process.env.DISCORD_BOT_ID,
 		botToken: process.env.DISCORD_BOT_TOKEN,
 		botPrefix: process.env.DISCORD_BOT_PREFIX,
@@ -12,8 +13,7 @@ module.exports = {
 		cubeChatChannel: '306902973706141708',
 		mtgaChannelId: '801525594520682536',
 		welcomeChannel: '659117988405837832',
-		serverId: '306902973706141708', // Online Cube Drafts Server
-		tgcChannel: '802301350510592020', // production tgc channel
+		serverId: '306902973706141708',
 	},
 	database: {
 		url: process.env.MONGO_URL,

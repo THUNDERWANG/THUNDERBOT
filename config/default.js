@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
 	discord: {
+		// discord settings are set for The Grand Calcutron server by default
 		botId: process.env.DEV_DISCORD_BOT_ID,
 		botToken: process.env.DEV_DISCORD_BOT_TOKEN,
 		botPrefix: process.env.DISCORD_BOT_PREFIX,
@@ -10,10 +11,9 @@ module.exports = {
 		triceRole: '796164469738831872',
 		xmageRole: '796164518115541012',
 		cubeChatChannel: '802301626588201010',
-		mtgaChannelId: '801910605656096838',
+		mtgaChannelId: '802301626588201010',
 		welcomeChannel: '802301626588201010',
-		serverId: '794675408570023937', // dev tgc server by default
-		tgcChannel: '802301626588201010', // dev tcg channel
+		serverId: '794675408570023937',
 		zapier: '802369375432736788',
 	},
 	database: {
