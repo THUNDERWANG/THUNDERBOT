@@ -10,6 +10,7 @@ module.exports = {
 		xmageRole: '585313738169778177',
 		triceRole: '585314755976364043',
 		cubeChatChannel: '306902973706141708',
+		mtgaChannelId: '801525594520682536',
 		welcomeChannel: '659117988405837832',
 		serverId: '306902973706141708', // Online Cube Drafts Server
 		tgcChannel: '802301350510592020', // production tgc channel
