@@ -19,7 +19,7 @@ module.exports = {
 			}
 			await message.channel.bulkDelete(arg + 1);
 		} catch (error) {
-			if (error.message.match(/14 days/)) return message.channel.send('you can only delete messages less than 14 days old')
+			if (error.message.match(/14 days/)) return message.channel.send('you can only delete messages less than 14 days old');
 			winston.error(error);
 		}
 	},
