@@ -9,22 +9,26 @@ module.exports = {
 	usage: ['[add <role>], [remove <role>]'],
 	description: 'add/remove xmage/cockatrice role',
 	async execute(message, args) {
+
+		const { replyToAuth } = message.helpers;
+		const [ option, role ] = args;
+
 		try {
-			if (args[0] === 'add') {
-				if (args[1] === 'xmage') {
+			if (option === 'add') {
+				if (role === 'xmage') {
 					await message.member.roles.add(xmageRole);
-					await message.channel.send(`<@${message.author.id}> added <@&${xmageRole}>`, { allowedMentions: { parse: [] } });
-				} else if (args[1] === 'trice' || args[1] === 'cockatrice') {
+					await replyToAuth(`added <@&${xmageRole}>`);
+				} else if (role === 'trice' || role === 'cockatrice') {
 					await message.member.roles.add(triceRole);
-					await message.channel.send(`<@${message.author.id}> added <@&${triceRole}>`, { allowedMentions: { parse: [] } });
+					await replyToAuth(`added <@&${triceRole}>`);
 				}
-			} else if (args[0] === 'remove') {
-				if (args[1] === 'xmage') {
+			} else if (option === 'remove') {
+				if (role === 'xmage') {
 					await message.member.roles.remove(xmageRole);
-					await message.channel.send(`<@${message.author.id}> removed <@&${xmageRole}>`, { allowedMentions: { parse: [] } });
-				} else if (args[1] === 'trice' || args[1] === 'cockatrice') {
+					await replyToAuth(`removed <@&${xmageRole}>`);
+				} else if (role === 'trice' || role === 'cockatrice') {
 					await message.member.roles.remove(triceRole);
-					await message.channel.send(`<@${message.author.id}> removed <@&${triceRole}>`, { allowedMentions: { parse: [] } });
+					await replyToAuth(`removed <@&${triceRole}>`);
 				}
 			}
 		} catch (error) {
