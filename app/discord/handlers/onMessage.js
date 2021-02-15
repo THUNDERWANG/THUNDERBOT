@@ -41,6 +41,7 @@ module.exports = discordClient => {
 			const { command, args } = message.checks;
 			command.execute(message, args);
 		} catch (error) {
+			// if check fails, error will bubble up to here
 			if (error.message.match(/^check/)) return;
 			winston.error(error);
 		}
