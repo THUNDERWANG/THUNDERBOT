@@ -16,8 +16,6 @@ module.exports = {
 		const arg = args[0];
 		const { reply, replyToAuth, replyEmbed, discordTag, userId } = message.helpers;
 
-		// prevents users from using .cube add <cube name>
-		if (args.length > 1) return await reply(`did you mean .cube ${this.usage}?`);
 		try {
 			// add cubes
 			if (arg === 'add') {
@@ -100,15 +98,15 @@ module.exports = {
 				await User.findUserAndUpdate(userId, payload);
 				await replyToAuth(`has deleted **${selectedCube.name}**`);
 
-				// returns another user's cubes or null if there are none found
+
+				// valid syntaxes: .cube @THUNDERWANG#1234 (parsed as user Id <@!986623452123> or <@986623452123>)
+				// .cube `@THUNDERWANG#1234` (mark down)
 			} else if (arg.startsWith('<@') && arg.endsWith('>')) {
 				// <@! is for nicknames
 				const targetId = (arg.startsWith('<@!')) ? arg.slice(3, -1) : arg.slice(2, -1);
-				if (!message.guild) await reply('you must be in the guild to retrieve cube data');
+
 				const member = message.guild.members.cache.get(targetId);
-				if (!member) {
-					return reply(`<@!${targetId}> could not be found in the guild!`);
-				}
+				if (!member) return await reply('Member could not be found in guild!');
 
 				const user = await User.findUser(targetId);
 				if (!user || !user.cubes || !user.cubes.length) {
@@ -123,15 +121,29 @@ module.exports = {
 				user.cubes.forEach((cube, index) => { if (cube) embed.addFields({ name: `${index + 1}. ${cube.name}`, value: cube.link }); });
 
 				await replyEmbed(embed);
-				return user.cubes;
 
-			} else if (arg === 'me') { // call above
+				// parse markdown
+			} else if (arg.startsWith('`')) {
+				let markDownText = args.join('').trim();
+				if (markDownText.startsWith('`') && markDownText.endsWith('`')) {
+					markDownText = markDownText.slice(1, -1).trim();
+					if (markDownText.startsWith('@')) markDownText = markDownText.slice(1);
+				}
+
+				let memberId = '';
+				const member = message.guild.members.cache.find(mem => (mem.user.tag.toLowerCase() === markDownText));
+				if (member) memberId = member.id;
+				this.execute(message, [`<@!${memberId}>`]);
+
+			} else if (arg === 'me') {
 				this.execute(message, [`<@!${userId}>`]);
 			}
+
+
 		} catch (error) {
 			// when the collector times out, it throws a Discord collection that extends Map with size 0
 			if (error.size === 0) return replyToAuth('\'s connection has timed out. Please start over.');
-			winston.error(error);
+			winston.error(error.message);
 			replyToAuth(', something went wrong :thinking:');
 		}
 	},
