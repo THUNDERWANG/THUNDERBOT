@@ -99,14 +99,15 @@ module.exports = {
 				await replyToAuth(`has deleted **${selectedCube.name}**`);
 
 
-				// valid syntaxes: .cube @THUNDERWANG#1234 (parsed as user Id <@!986623452123> or <@986623452123>)
-				// .cube `@THUNDERWANG#1234` (mark down)
+				// valid syntaxes:
+				// .cube @THUNDERWANG#1234 (parsed as <@!986623452123> or <@986623452123>)
+				// .cube `@THUNDERWANG#1234` (markdown)
 			} else if (arg.startsWith('<@') && arg.endsWith('>')) {
 				// <@! is for nicknames
 				const targetId = (arg.startsWith('<@!')) ? arg.slice(3, -1) : arg.slice(2, -1);
 
 				const member = message.guild.members.cache.get(targetId);
-				if (!member) return await reply('Member could not be found in guild!');
+				if (!member) return await reply('The member could not be found in guild! :thinking:');
 
 				const user = await User.findUser(targetId);
 				if (!user || !user.cubes || !user.cubes.length) {
@@ -122,7 +123,7 @@ module.exports = {
 
 				await replyEmbed(embed);
 
-				// parse markdown
+				// parse markdown `@THUNDERWANG#1234`
 			} else if (arg.startsWith('`')) {
 				let markDownText = args.join('').trim();
 				if (markDownText.startsWith('`') && markDownText.endsWith('`')) {
@@ -137,6 +138,15 @@ module.exports = {
 
 			} else if (arg === 'me') {
 				this.execute(message, [`<@!${userId}>`]);
+
+			} else if (arg.match(/^\d+$/)) { // search by discord Id
+				this.execute(message, [`<@!${arg}>`]);
+
+			} else {
+				// search by discord username
+				const tag = args.join('').trim();
+				if (!tag.includes('#')) return;
+				this.execute(message, [`\`${tag}\``]);
 			}
 
 
