@@ -19,7 +19,7 @@ commandFiles.forEach(file => {
 module.exports = message => {
 	if (!message.content.startsWith(prefix)) throw Error('checkArgs failed');
 
-	const args = message.content.toLowerCase().slice(prefix.length).split(/ +/);
+	const args = message.content.toLowerCase().trim().slice(prefix.length).split(/ +/);
 	const commandName = args.shift();
 
 	// search commands collection for command or search via aliases
