@@ -16,7 +16,7 @@ module.exports = function() {
 			handleRejections: true,
 			format: winston.format.combine(
 				winston.format.timestamp({ format: dateString }),
-				winston.format.simple(),
+				myFormat,
 			),
 		}),
 	);
