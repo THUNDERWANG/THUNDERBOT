@@ -22,7 +22,7 @@ module.exports = {
 					let name = `${botPrefix}${command.name}`;
 					if (command.usage) name += ` ${command.usage}`;
 					const value = `${command.description}`;
-					messageEmbed.addFields({ name, value })
+					messageEmbed.addFields({ name, value });
 				});
 			} else {
 				message.checks.commands.forEach(command => {
