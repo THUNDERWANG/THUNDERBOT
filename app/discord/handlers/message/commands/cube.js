@@ -17,13 +17,17 @@ module.exports = {
 		const { reply, replyToAuth, replyEmbed, discordTag, userId } = message.helpers;
 
 		try {
+
+			// sometimes folks are typing in .cube add <cube link> or .cube add <cube name>
+			if (args.length > 1) return await reply('Try just **.cube add**');
+
 			// add cubes
 			if (arg === 'add') {
 				const user = await User.findUserAndUpdate(userId, { discordTag });
 				const { cubes } = user;
 				if (cubes && cubes.length >= maxSlots) return await replyToAuth('has no more open slots!');
 
-				await reply(':pencil: **Enter __cube name__ or __"cancel"__ ** :pencil:');
+				await reply(':pencil: **Enter a __cube name__ or __cancel__** :pencil:');
 
 				// input must be from same user
 				const filterName = input => input.author.id === message.author.id;
@@ -33,9 +37,9 @@ module.exports = {
 
 				// return on "cancel or ".cube" to prevent opening a second collector
 				const inputName = collectorName.first().content.trim();
-				if (inputName.toLowerCase() === 'cancel' || inputName.toLowerCase().startsWith('.cube')) return await replyToAuth('has cancelled');
+				if (inputName.toLowerCase() === 'cancel' || inputName.toLowerCase().startsWith('.cube')) return await replyToAuth('has cancelled :x:');
 
-				await reply(':link: **Enter __cube URL__ or __"cancel"__ ** :link:');
+				await reply(':link: **Enter a __cube URL__ or __cancel__** :link:');
 
 				const filterURL = input => {
 					if (input.author.id !== message.author.id) return false;
@@ -53,12 +57,12 @@ module.exports = {
 
 				const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 6, time: 45000, dispose: true, errors: ['time'] });
 				const inputURL = collectorURL.first().content.toLowerCase();
-				if (inputURL === 'cancel' || inputURL.startsWith('.cube')) return await replyToAuth('has cancelled');
+				if (inputURL === 'cancel' || inputURL.startsWith('.cube')) return await replyToAuth('has cancelled :x:');
 
 				cubes.push({ name: inputName, link: inputURL });
 
 				await user.save();
-				await replyToAuth(`has added **${inputName}**`);
+				await replyToAuth(`has added **${inputName}** :white_check_mark:`);
 
 			} else if (arg === 'delete' || arg === 'remove') {
 				const user = await User.findUser(userId);
@@ -67,10 +71,10 @@ module.exports = {
 				}
 				const { cubes } = user;
 
+				await reply(':1234: **Enter a __number__ or __cancel__** :1234:');
 				const embed = new Discord.MessageEmbed()
-					.setTitle(':1234: **Enter __number__ or __"cancel"__** :1234:')
+					.setTitle(`**${discordTag}'s Cubes**`)
 					.setColor(message.guild.members.cache.get(userId).roles.highest.color)
-					.setDescription(`**${discordTag}'s Cubes**`)
 					.setThumbnail(message.author.avatarURL());
 				user.cubes.forEach((cube, index) => { if (cube) embed.addFields({ name: `${index + 1}. ${cube.name}`, value: cube.link }); });
 				await replyEmbed(embed);
@@ -90,7 +94,7 @@ module.exports = {
 
 				const collectorChoice = await message.channel.awaitMessages(filterChoice, { max: 1, time: 10000, dispose: true, errors: ['time'] });
 				let inputChoice = collectorChoice.first().content.toLowerCase();
-				if (inputChoice === 'cancel') return replyToAuth('has cancelled');
+				if (inputChoice === 'cancel') return replyToAuth('has cancelled :x:');
 				const selectedCube = cubes[--inputChoice];
 
 				// delete cube from database
