@@ -8,7 +8,7 @@ const handlers = handlerFiles.map(file => require(`./ready/${file}`));
 module.exports = discordClient => {
 	discordClient.once('ready', () => {
 		try {
-			handlers.forEach(handler=>handler());
+			handlers.forEach(handler=>handler(discordClient));
 			winston.info('Bzz, THUNDERBOT is ready!');
 		} catch(error) {
 			winston.error(error);

@@ -1,11 +1,10 @@
 const { cubeChatChannel } = require('config').discord;
-const client = require('../../../../index.js');
 const winston = require('winston');
 
-module.exports = () => {
+module.exports = (discordClient) => {
 	setInterval(async () => {
 		try {
-			const channel = client.channels.cache.get(cubeChatChannel);
+			const channel = discordClient.channels.cache.get(cubeChatChannel);
 			await channel.send('Please don\'t forget to post your Xmage gamelog files :pray:');
 			winston.info('broadcast sent');
 		} catch (error) {
