@@ -1,6 +1,7 @@
 const { cubeChatChannel } = require('config').discord;
 const winston = require('winston');
 
+// use chron job or similar in the future because uptime on heroku isn't stable
 module.exports = (discordClient) => {
 	setInterval(async () => {
 		try {
@@ -10,6 +11,6 @@ module.exports = (discordClient) => {
 		} catch (error) {
 			winston.error(error);
 		}
-	}, 86400000);
+	}, 172800000);
 	winston.info('Broadcast set');
 };
