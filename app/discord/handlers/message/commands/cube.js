@@ -18,11 +18,10 @@ module.exports = {
 
 		try {
 
-			// sometimes folks are typing in .cube add <cube link> or .cube add <cube name>
-			if (args.length > 1) return await reply('Try just **.cube add**');
-
 			// add cubes
 			if (arg === 'add') {
+				// folks are typing in .cube add [cube link] so this will help correct for it.
+				if (args.length > 1) return await reply('Try just **.cube add**');
 				const user = await User.findUserAndUpdate(userId, { discordTag });
 				const { cubes } = user;
 				if (cubes && cubes.length >= maxSlots) return await replyToAuth('has no more open slots!');
