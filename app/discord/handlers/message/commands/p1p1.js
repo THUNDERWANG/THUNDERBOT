@@ -88,7 +88,7 @@ module.exports = {
 				const pack = new Discord.MessageAttachment(`https://cubecobra.com/cube/samplepackimage/${arg2}/161${random}`).setName('pack.png');
 				messageEmbed
 					.setTitle(`${arg2}@Cube Cobra`)
-					.setURL(`https://www.cubetutor.com/viewcube/${arg2}`)
+					.setURL(`https://cubecobra.com/cube/list/${arg2}`)
 					.setDescription(`:thinking: What's the pick? :thinking:\n\n${bonusQuestion}`)
 					.setThumbnail('http://cubecobra.com/content/sticker.png')
 					.attachFiles([pack])
