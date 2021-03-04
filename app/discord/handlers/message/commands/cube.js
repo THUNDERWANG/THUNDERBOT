@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const User = require('../../../../database/models/user.model.js');
 const Joi = require('joi');
-const maxSlots = require('config').database;
+const { maxSlots } = require('config').database;
 const winston = require('winston');
 
 module.exports = {
