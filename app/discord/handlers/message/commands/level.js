@@ -71,16 +71,14 @@ module.exports = {
 			} else if (arg === 'down') {
 				const user = await User.findUser(userId);
 				if (!user || !user.points) return await replyToAuth('can not go below 0 points!');
+
+				// remove previous level if needed
+				const level = findLevel(user.points);
+				if (user.points === level.points) message.member.roles.remove(level.id);
 				user.points--;
 				await user.save();
-				const { points } = user;
-				const level = findLevel(points);
-				// remove previous level
-				if (points === level.points) {
-					await message.member.roles.remove(level.next.id);
-				}
 
-				return await replyToAuth(`now has **${points}** points`);
+				return await replyToAuth(`now has **${user.points}** points`);
 			}
 		} catch (error) {
 			winston.error(error);
