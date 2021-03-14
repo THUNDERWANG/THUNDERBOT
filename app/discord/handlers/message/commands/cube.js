@@ -128,7 +128,7 @@ module.exports = {
 
 				// parse markdown `@THUNDERWANG#1234`
 			} else if (arg.startsWith('`')) {
-				let markDownText = args.join('').trim();
+				let markDownText = args.join(' ').trim();
 				if (markDownText.startsWith('`') && markDownText.endsWith('`')) {
 					markDownText = markDownText.slice(1, -1).trim();
 					if (markDownText.startsWith('@')) markDownText = markDownText.slice(1);
