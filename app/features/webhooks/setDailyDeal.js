@@ -15,6 +15,7 @@ const { zapier } = require('config').discord;
 // would much prefer if zapier sent the message directly to the server, but the service costs money.
 
 module.exports = async (client) => {
+  logger.info('Tracking deals...');
   client.on('message', async (message) => {
     try {
       if (message.author.id !== zapier && !message.content.toLowerCase().includes('here are')) return;
@@ -54,7 +55,6 @@ module.exports = async (client) => {
         const extraEmbeds = await mtgaDailyDealChannel.send(discordEmbed);
         await extraEmbeds.crosspost();
       }
-      logger.info('Tracking deals...');
     } catch (error) {
       logger.error(error);
     }
