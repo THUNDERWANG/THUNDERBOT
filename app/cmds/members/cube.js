@@ -59,11 +59,11 @@ module.exports = class CubeCommand extends Commando.Command {
           await user.save();
           return await replyToAuth(`has added **${cubeMeta.title}** :white_check_mark:`);
         }
-        // if url is not provided with the commandm ask for cube url and and recall
+        // if url is not provided with the command ask for cube url and and recall
         const question = await reply(':link: **Enter a __cube URL__ or __Cube Cobra ID__ or __cancel__ or to cancel** :link:');
 
         const filterURL = (input) => input.author.id === message.author.id;
-        const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, maxProcessed: 1, time: 45000, dispose: true, errors: ['time'] });
+        const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, time: 45000, errors: ['time'] });
         const inputURL = collectorURL.first().content.toLowerCase();
         if (inputURL === 'cancel') return replyToAuth('has cancelled :x:');
         if (inputURL.startsWith('.cube')) return question.delete(); // user opens another menu on accident
@@ -96,7 +96,7 @@ module.exports = class CubeCommand extends Commando.Command {
           return true;
         };
 
-        const collectorNo = await message.channel.awaitMessages(filterNo, { max: 1, time: 10000, maxProcessed: 3, dispose: true, errors: ['time'] });
+        const collectorNo = await message.channel.awaitMessages(filterNo, { max: 1, time: 10000, maxProcessed: 3, errors: ['time'] });
         let inputChoice = collectorNo.first().content.toLowerCase();
         if (inputChoice === 'cancel') return replyToAuth('has cancelled :x:');
         if (inputChoice.startsWith('.cube')) return question.delete(); // user opens another menu on accident

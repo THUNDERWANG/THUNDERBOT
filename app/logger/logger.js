@@ -17,14 +17,11 @@ const logger = createLogger({
   ],
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new transports.Console({
-    level: 'error',
-    format: format.combine(
-      format.colorize({ all: true }),
-      format.printf(printFormat),
-    ),
-  }));
-}
+logger.add(new transports.Console({
+  format: format.combine(
+    format.colorize({ all: true }),
+    format.printf(printFormat),
+  ),
+}));
 
 module.exports = logger;
