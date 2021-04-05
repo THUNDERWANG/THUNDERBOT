@@ -11,7 +11,7 @@ module.exports = class DrafterCommand extends Commando.Command {
       guildOnly: true,
       memberName: 'assemble',
       description: 'Just use @xmage or @cockatrice.',
-      throttling: { usages: 1, duration: 600000 },
+      throttling: { usages: 1, duration: 600 },
     });
   }
 
