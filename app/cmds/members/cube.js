@@ -6,7 +6,7 @@ const logger = require('@logger/logger.js');
 const { defaultCooldown } = require('config').discord;
 const { fetchCubeMeta } = require('@helpers/helpers.js');
 const { maxSlots } = require('config').database;
-const { makeReplies } = require('@helpers/helpers.js');
+const { makeReplies, validateCubeURL } = require('@helpers/helpers.js');
 
 module.exports = class CubeCommand extends Commando.Command {
   constructor(client) {
@@ -43,37 +43,41 @@ module.exports = class CubeCommand extends Commando.Command {
   }
 
   async run(message, { verb, url }) {
+
     const { id: userId, tag: discordTag } = message.author;
     const { replyToAuth } = makeReplies(message);
 
     try {
       if (verb === 'add' || verb === 'set') {
+
         const user = await User.findUserAndUpdate(userId, { discordTag });
         const { cubes } = user;
         if (cubes && cubes.length >= maxSlots) return await replyToAuth('has no more open slots!');
 
-        // if url is provided with the command
-        if (url) {
-          const cubeMeta = await fetchCubeMeta(url); // throws error on failure
-          cubes.push({ name: cubeMeta.title, link: cubeMeta.url });
-          await user.save();
-          return await replyToAuth(`has added **${cubeMeta.title}** :white_check_mark:`);
+        // if no url or id provided, open up collector and listen for one
+        let inputURL = '';
+        if (!url) {
+          const question = await message.say(':link: **Enter a __cube URL__ or __Cube Cobra ID__ or __cancel__ or to cancel** :link:');
+          const filterURL = (input) => input.author.id === message.author.id;
+          const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, dispose: true, time: 45000, errors: ['time'] });
+          inputURL = collectorURL.last().content.toLowerCase();
+          if (inputURL === 'cancel') return replyToAuth('has cancelled :x:');
+          if (inputURL.startsWith('.cube')) return question.delete(); // user opens another menu on accident
+          return this.run(message, { verb, url: inputURL });
         }
-        // if url is not provided with the command ask for cube url and and recall
-        const question = await message.say(':link: **Enter a __cube URL__ or __Cube Cobra ID__ or __cancel__ or to cancel** :link:');
 
-        const filterURL = (input) => input.author.id === message.author.id;
-        const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, dispose: true, time: 45000, errors: ['time'] });
-        const inputURL = collectorURL.last().content.toLowerCase();
-        if (inputURL === 'cancel') return replyToAuth('has cancelled :x:');
-        if (inputURL.startsWith('.cube')) return question.delete(); // user opens another menu on accident
+        // check if input is url or cube cobra id
+        const validation = validateCubeURL(url);
+        const cubeMeta = validation ? await fetchCubeMeta(url) : await fetchCubeMeta(`https://cubecobra.com/cube/overview/${url}`);
 
-        return this.run(message, { verb, url: inputURL });
+        cubes.push({ name: cubeMeta.title, link: cubeMeta.url });
+        await user.save();
+        return await replyToAuth(`has added **${cubeMeta.title}** :white_check_mark:`);
 
       } if (verb === 'delete' || verb === 'remove' || verb === 'unset') {
+
         const user = await User.findUser(userId);
         if (!user || !user.cubes || !user.cubes.length) return await message.say(`<@!${userId}> has not set any cubes!`);
-
         const { cubes } = user;
 
         const question = await message.say(':1234: **Enter a __number__ or __cancel__** :1234:');
@@ -108,14 +112,13 @@ module.exports = class CubeCommand extends Commando.Command {
         await User.findUserAndUpdate(userId, payload);
         await replyToAuth(`has deleted **${selectedCube.name}**`);
 
-        // valid syntaxes:
-        // .cube @THUNDERWANG#1234 (parsed as <@!986623452123> or <@986623452123>)
-        // .cube `@THUNDERWANG#1234` (markdown)
       } else if (verb === 'refresh') {
         // TODO: implement refresh all lists
 
+        // cube look up
+        // search by mention (parsed as <@!986623452123> or <@986623452123>)
       } else if (verb.startsWith('<@') && verb.endsWith('>')) {
-        // <@! is for nicknames
+        // <@! is for nicknames; parse id number
         const targetId = (verb.startsWith('<@!')) ? verb.slice(3, -1) : verb.slice(2, -1);
 
         const member = message.guild.members.cache.get(targetId);
@@ -131,7 +134,8 @@ module.exports = class CubeCommand extends Commando.Command {
         user.cubes.forEach((cube, index) => { if (cube) embed.addFields({ name: `${index + 1}. ${cube.name}`, value: cube.link }); });
         message.say(embed);
 
-      } else if (verb.startsWith('`') && verb.endsWith('`')) { // parse markdown `@THUNDERWANG#1234`
+        // search by `@THUNDERWANG#1234`
+      } else if (verb.startsWith('`') && verb.endsWith('`')) {
         let markDownText = verb.slice(1, -1).trim().toLowerCase();
         if (markDownText.startsWith('@')) markDownText = markDownText.slice(1);
         const member = message.guild.members.cache.find((mem) => (mem.user.tag.toLowerCase() === markDownText));
@@ -140,13 +144,14 @@ module.exports = class CubeCommand extends Commando.Command {
       } else if (verb === 'me') {
         this.run(message, { verb: `<@!${userId}>` });
 
-      } else if (verb.includes('#')) { // search by discord username
+        // search by discord username
+      } else if (verb.includes('#')) {
         this.run(message, { verb: `\`${verb}\`` });
       }
     } catch (error) {
       // when the collector times out, it throws a Discord Collection that extends Map with size 0
       if (error.size === 0) return replyToAuth('\'s connection has timed out. Please start over.');
-      if (error.message === 'Could not fetch cube data!') return message.say(error.message);
+      if (error.message.contains('valid domain')) return message.say(error.message);
       message.say('Something went wrong!');
       logger.error(error);
     }

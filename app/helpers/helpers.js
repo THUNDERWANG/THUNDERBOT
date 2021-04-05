@@ -21,33 +21,29 @@ function getFromHTML(dom, item) {
   return element ? element.getAttribute('content') : null;
 }
 
-async function fetchCubeMeta(id) {
+async function fetchCubeMeta(url) {
+  if (!validateCubeURL(url)) throw new Error('Not a valid domain');
+  const { hostname } = new URL(url);
+  const res = await fetch(url);
+  const html = await res.text();
+  const dom = new JSDOM(html);
+  const rawTitle = getFromHTML(dom, 'title');
+  if (!rawTitle || rawTitle === 'Cube Cobra Overview: Cube Not Found') throw new Error('Could not find cube!');
   const cube = {};
-  // determine if a url was given or a cube cobra id
-  if (validateCubeURL(id)) {
-    const { hostname, href } = new URL(id);
-    const res = await fetch(href);
-    const html = await res.text();
-    const dom = new JSDOM(html);
-    const rawTitle = getFromHTML(dom, 'title');
-    if (!rawTitle || rawTitle === 'Cube Cobra Overview: Cube Not Found') throw new Error('Could not fetch cube data!');
-    if (hostname === 'cubecobra.com') {
-      // TODO: LOOK FOR SOME LIBRARY THAT CAN TAKE CARE OF PROCESSING URLS
-      cube.id = href.endsWith('/') ? href.slice(0, -1) : href.slice(href.lastIndexOf('/') + 1);
-      cube.title = rawTitle.slice(rawTitle.indexOf(':') + 1).trim();
-      cube.url = getFromHTML(dom, 'url');
-      cube.thumbnail = getFromHTML(dom, 'image');
-      cube.description = getFromHTML(dom, 'description');
-      cube.pack = `https://cubecobra.com/cube/samplepackimage/${cube.id}/161${Math.floor(Math.random() * 9999999999) + 1}.png`;
-    } else if (hostname === 'www.cubetutor.com') {
-      cube.title = rawTitle.slice(rawTitle.indexOf('-') + 1, rawTitle.lastIndexOf('-')).trim();
-      cube.url = href;
-    }
-  } else { // assume the id is a cube cobra id
-    return fetchCubeMeta(`https://cubecobra.com/cube/overview/${id}`);
+  if (hostname === 'cubecobra.com') {
+    // TODO: Find a more robust method to parse URLS
+    cube.id = url.endsWith('/') ? url.slice(0, -1) : url.slice(url.lastIndexOf('/') + 1);
+    cube.title = rawTitle.slice(rawTitle.indexOf(':') + 1).trim();
+    cube.url = getFromHTML(dom, 'url');
+    cube.thumbnail = getFromHTML(dom, 'image');
+    cube.description = getFromHTML(dom, 'description');
+    cube.pack = `https://cubecobra.com/cube/samplepackimage/${cube.id}/161${Math.floor(Math.random() * 9999999999) + 1}.png`;
+  } else {
+    cube.title = rawTitle.slice(rawTitle.indexOf('-') + 1, rawTitle.lastIndexOf('-')).trim();
+    cube.url = url;
   }
-
-  if (Object.values(cube).includes(null)) throw Error('Could not fetch cube data!');
+  // taking an all or nothing approach here to ensure integrity
+  if (Object.values(cube).includes(null)) throw Error('Could not fetch complete meta data!');
   return cube;
 }
 

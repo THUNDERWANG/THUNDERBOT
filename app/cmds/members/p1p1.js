@@ -4,7 +4,7 @@ const { JSDOM } = require('jsdom');
 const logger = require('@logger/logger.js');
 const fetch = require('node-fetch');
 const { createCanvas, loadImage } = require('canvas');
-const { fetchCubeMeta } = require('@helpers/helpers.js');
+const { fetchCubeMeta, validateCubeURL } = require('@helpers/helpers.js');
 const { defaultCooldown, botPrefix, botColor } = require('config').discord;
 
 const bonusQuestions = [];
@@ -65,7 +65,7 @@ module.exports = class P1P1Command extends Commando.Command {
         elements.forEach((element) => images.push(loadImage(element.getAttribute('src'))));
         const cards = await Promise.all(images);
 
-        // create canvas to switch images together
+        // create canvas to stitch images together
         const cardWidth = 275;
         const cardHeight = 400;
         const canvas = createCanvas(cardWidth * 5, cardHeight * 3);
@@ -100,7 +100,12 @@ module.exports = class P1P1Command extends Commando.Command {
           await message.channel.send(messageEmbed);
           await fetching.delete();
         });
+
       } else if (domain === 'cc') {
+        // check if url or cube cobra id is given
+        const validation = validateCubeURL(id);
+        if (!validation) return this.run(message, { domain, id: `https://cubecobra.com/cube/overview/${id}` });
+
         fetching = await message.say('**Generating pack...**');
         const meta = await fetchCubeMeta(id);
         const { title, url, description, thumbnail, pack } = meta;
@@ -125,12 +130,13 @@ module.exports = class P1P1Command extends Commando.Command {
         // .setImage('attachment://pack.png');
         await message.embed(messageEmbed);
         await fetching.delete();
-      } else if (!id) { // user types in .p1p1 THUNDERWANG, so domain should default to cc
+        // parse .p1p1 THUNDERWANG (domain defaults to cc)
+      } else if (!id) {
         this.run(message, { domain: 'cc', id: domain });
       }
     } catch (error) {
       if (error.message === 'Could not fetch cube data!') return fetching.edit(error.message);
-      message.say('Something went wrong!');
+      fetching.edit(error.message);
       logger.error(error);
     }
   }
