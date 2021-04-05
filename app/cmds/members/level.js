@@ -57,7 +57,6 @@ module.exports = class LevelCommand extends Commando.Command {
         messageEmbed
           .setColor(botColor)
           .setTitle(':ladder: **__Levels__** :ladder:')
-          .setThumbnail('https://cdn.discordapp.com/icons/306902973706141708/83439f8e31f9b07ab992b47d563ee1ce.webp?size=256')
           .setImage(image)
           .setDescription(description);
         levels.forEach((level) => {
@@ -75,8 +74,8 @@ module.exports = class LevelCommand extends Commando.Command {
           messageEmbed
             .setColor(nextColor)
             .setTitle(':fire: **__LEVEL UP__** :fire:')
-            .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
             .setImage(level.image)
+            .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
             .setDescription(`**<@!${message.author.id}> \n <@&${level.id}> \nPoints: __${points}__**`);
           return message.say(messageEmbed);
         }
