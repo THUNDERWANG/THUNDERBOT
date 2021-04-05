@@ -60,7 +60,7 @@ module.exports = class LevelCommand extends Commando.Command {
           .setImage(image)
           .setDescription(description);
         levels.forEach((level) => {
-          messageEmbed.addField(level.name, `${level.points} points`, true);
+          messageEmbed.addField(level.name, `${level.points}+ points`, true);
         });
         message.say(messageEmbed);
 
@@ -83,7 +83,7 @@ module.exports = class LevelCommand extends Commando.Command {
         let description = `<@!${userId}> now has __${points}__ points!\n`;
         description = !level.next
           ? `**${description}:triumph: YOU ARE AT THE FINAL LEVEL :triumph:**`
-          : `**${description}__${level.next.points - points}__ more until <@&${level.next.id}>**`;
+          : `**${description}__${level.next.points - points}__ more to <@&${level.next.id}>**`;
 
         messageEmbed
           .setColor(message.guild.members.cache.get(userId).roles.highest.color) // set color
