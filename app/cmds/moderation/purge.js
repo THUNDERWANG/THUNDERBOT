@@ -24,7 +24,8 @@ module.exports = class AddCommand extends Commando.Command {
   async run(message, { amount }) {
     try {
       if (amount === 0) return;
-      if (amount < 0) return message.reply('integer must be positive');
+      if (amount < 0 || amount > 20) return message.reply('int must be < +20');
+
       await message.channel.bulkDelete(amount + 1);
     } catch (error) {
       message.say(error.message);
