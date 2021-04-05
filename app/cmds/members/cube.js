@@ -110,7 +110,7 @@ module.exports = class CubeCommand extends Commando.Command {
         const selectedCube = cubes[--inputChoice];
         const payload = { $pull: { cubes: selectedCube } };
         await User.findUserAndUpdate(userId, payload);
-        await replyToAuth(`has deleted **${selectedCube.name}**`);
+        await replyToAuth(`has deleted **${selectedCube.name}** :put_litter_in_its_place:`);
 
       } else if (verb === 'refresh') {
         // TODO: implement refresh all lists
@@ -135,8 +135,9 @@ module.exports = class CubeCommand extends Commando.Command {
         message.say(embed);
 
         // search by `@THUNDERWANG#1234`
-      } else if (verb.startsWith('`') && verb.endsWith('`')) {
-        let markDownText = verb.slice(1, -1).trim().toLowerCase();
+      } else if (verb.startsWith('`')) {
+        const { content } = message;
+        let markDownText = content.slice(content.indexOf('`') + 1, content.lastIndexOf('`')).trim().toLowerCase();
         if (markDownText.startsWith('@')) markDownText = markDownText.slice(1);
         const member = message.guild.members.cache.find((mem) => (mem.user.tag.toLowerCase() === markDownText));
         return member ? this.run(message, { verb: `<@!${member.id}>` }) : message.say('Member could not be found!');
