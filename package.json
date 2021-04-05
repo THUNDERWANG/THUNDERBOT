@@ -1,31 +1,43 @@
 {
-  "name": "the-grand-calcutron",
-  "version": "2.0.0",
-  "description": "",
-  "main": "index.js",
-  "engines": {
-    "node": "14.x"
-  },
-  "dependencies": {
-    "canvas": "^2.6.1",
-    "config": "^3.3.3",
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
-    "joi": "^17.3.0",
-    "mongoose": "^5.11.15",
-    "node-fetch": "^2.6.1",
-    "node-html-parser": "^2.0.2",
-    "winston": "^3.3.3"
-  },
-  "devDependencies": {
-    "eslint": "^7.19.0",
-    "nodemon": "^2.0.7"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "the-grand-calcutron",
+	"version": "3.0.0",
+	"description": "Bot used for Online Cube Drafts",
+	"main": "index.js",
+	"engines": {
+		"node": "15.x"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js"
+	},
+	"author": "THUNDERWANG",
+	"license": "ISC",
+	"dependencies": {
+		"canvas": "^2.7.0",
+		"config": "^3.3.6",
+		"discord.js": "^12.5.2",
+		"discord.js-commando": "^0.12.3",
+		"dotenv": "^8.2.0",
+		"joi": "^17.4.0",
+		"jsdom": "^16.5.2",
+		"module-alias": "^2.2.2",
+		"mongoose": "^5.12.3",
+		"node-fetch": "^2.6.1",
+		"winston": "^3.3.3"
+	},
+	"devDependencies": {
+		"eslint": "^7.23.0",
+		"eslint-config-airbnb-base": "^14.2.1",
+		"eslint-plugin-import": "^2.22.1",
+		"nodemon": "^2.0.7"
+	},
+	"_moduleAliases": {
+		"@root": ".",
+		"@app": "./app",
+		"@cmds": "./app/cmds",
+		"@db": "./app/db",
+		"@logger": "./app/logger",
+		"@helpers": "./app/helpers",
+		"@features": "./app/features"
+	}
 }

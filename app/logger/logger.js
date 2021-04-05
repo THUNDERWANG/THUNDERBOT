@@ -1,35 +1,30 @@
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
 
-const dateString = new Date().toLocaleString('en-US', {
-	timeZone: 'America/Los_Angeles',
+const dateString = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+const printFormat = ({ message, timestamp, stack }) => (stack ? `${timestamp} - ${message} \n ${stack}` : `${timestamp} - ${message}`);
+const logger = createLogger({
+  level: 'info',
+  format: format.combine(
+    format.timestamp({ format: dateString }),
+    format.errors({ stack: true }),
+    format.printf(printFormat),
+
+  ),
+  defaultMeta: { service: 'The Grand Calcutron' },
+  transports: [
+    new transports.File({ filename: 'errors.log',
+    }),
+  ],
 });
 
-const myFormat = winston.format.printf(({ message, timestamp }) => {
-	return `${timestamp}\n${message}`;
-});
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new transports.Console({
+    level: 'error',
+    format: format.combine(
+      format.colorize({ all: true }),
+      format.printf(printFormat),
+    ),
+  }));
+}
 
-module.exports = function() {
-	winston.add(
-		new winston.transports.File({
-			filename: 'logs.log',
-			handleExceptions: true,
-			handleRejections: true,
-			format: winston.format.combine(
-				winston.format.timestamp({ format: dateString }),
-				myFormat,
-			),
-		}),
-	);
-
-	winston.add(
-		new winston.transports.Console({
-			handleExceptions: true,
-			handleRejections: true,
-			format: winston.format.combine(
-				winston.format.timestamp({ format: dateString }),
-				winston.format.colorize({ all: true }),
-				myFormat,
-			),
-		}),
-	);
-};
+module.exports = logger;
