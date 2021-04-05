@@ -91,8 +91,7 @@ const levelsProduction = [
     points: 25,
   },
 ];
-
-const levels = process.env.ENV === 'production' ? levelsProduction : levelsDevelopment;
+const levels = process.env.NODE_ENV === 'production' ? levelsProduction : levelsDevelopment;
 
 // creates double-linked levels from an array
 function createLinks(levelArray) {
