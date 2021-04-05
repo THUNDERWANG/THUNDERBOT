@@ -6,8 +6,8 @@ const { JSDOM } = require('jsdom');
 function makeReplies(message) {
   return {
     noMention: { allowedMentions: { parse: [] } },
-    replyToAuth(reply) { message.say(`<@!${message.author.id}> ${reply}`, { allowedMentions: { parse: [] } }); },
-    reply(reply) { message.channel.send(reply, { allowedMentions: { parse: [] } }); },
+    replyToAuth(reply) { return message.say(`<@!${message.author.id}> ${reply}`, { allowedMentions: { parse: [] } }); },
+    reply(reply) { return message.channel.send(reply, { allowedMentions: { parse: [] } }); },
   };
 }
 

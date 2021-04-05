@@ -44,7 +44,7 @@ module.exports = class CubeCommand extends Commando.Command {
 
   async run(message, { verb, url }) {
     const { id: userId, tag: discordTag } = message.author;
-    const { reply, replyToAuth } = makeReplies(message);
+    const { replyToAuth } = makeReplies(message);
 
     try {
       if (verb === 'add' || verb === 'set') {
@@ -60,11 +60,11 @@ module.exports = class CubeCommand extends Commando.Command {
           return await replyToAuth(`has added **${cubeMeta.title}** :white_check_mark:`);
         }
         // if url is not provided with the command ask for cube url and and recall
-        const question = await reply(':link: **Enter a __cube URL__ or __Cube Cobra ID__ or __cancel__ or to cancel** :link:');
+        const question = await message.say(':link: **Enter a __cube URL__ or __Cube Cobra ID__ or __cancel__ or to cancel** :link:');
 
         const filterURL = (input) => input.author.id === message.author.id;
-        const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, time: 45000, errors: ['time'] });
-        const inputURL = collectorURL.first().content.toLowerCase();
+        const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, dispose: true, time: 45000, errors: ['time'] });
+        const inputURL = collectorURL.last().content.toLowerCase();
         if (inputURL === 'cancel') return replyToAuth('has cancelled :x:');
         if (inputURL.startsWith('.cube')) return question.delete(); // user opens another menu on accident
 
@@ -72,11 +72,11 @@ module.exports = class CubeCommand extends Commando.Command {
 
       } if (verb === 'delete' || verb === 'remove' || verb === 'unset') {
         const user = await User.findUser(userId);
-        if (!user || !user.cubes || !user.cubes.length) return await reply(`<@!${userId}> has not set any cubes!`);
+        if (!user || !user.cubes || !user.cubes.length) return await message.say(`<@!${userId}> has not set any cubes!`);
 
         const { cubes } = user;
 
-        const question = await reply(':1234: **Enter a __number__ or __cancel__** :1234:');
+        const question = await message.say(':1234: **Enter a __number__ or __cancel__** :1234:');
         const embed = new Discord.MessageEmbed()
           .setTitle(`**${discordTag}'s Cubes**`)
           .setColor(message.guild.members.cache.get(userId).roles.highest.color)
@@ -86,8 +86,9 @@ module.exports = class CubeCommand extends Commando.Command {
 
         // input must be between 1 - cubes.length
         const filterNo = (input) => {
+          const processedInput = input.content.toLowerCase().trim();
           if (input.author.id !== userId) return false;
-          if (input.content.toLowerCase().trim().startsWith('.cube')) return true;
+          if (processedInput.startsWith('.cube') || processedInput === 'cancel') return true;
           const validation = Joi.number().min(1).max(cubes.length).validate(Number.parseInt(input, 10));
           if (validation.error) {
             replyToAuth('did not select a valid number. Try again.');
@@ -96,8 +97,8 @@ module.exports = class CubeCommand extends Commando.Command {
           return true;
         };
 
-        const collectorNo = await message.channel.awaitMessages(filterNo, { max: 1, time: 10000, maxProcessed: 3, errors: ['time'] });
-        let inputChoice = collectorNo.first().content.toLowerCase();
+        const collectorNo = await message.channel.awaitMessages(filterNo, { max: 1, time: 10000, dispose: true, maxProcessed: 3, errors: ['time'] });
+        let inputChoice = collectorNo.last().content.toLowerCase();
         if (inputChoice === 'cancel') return replyToAuth('has cancelled :x:');
         if (inputChoice.startsWith('.cube')) return question.delete(); // user opens another menu on accident
 
@@ -118,10 +119,10 @@ module.exports = class CubeCommand extends Commando.Command {
         const targetId = (verb.startsWith('<@!')) ? verb.slice(3, -1) : verb.slice(2, -1);
 
         const member = message.guild.members.cache.get(targetId);
-        if (!member) return reply('The member could not be found in guild! :thinking:');
+        if (!member) return message.say('The member could not be found in guild! :thinking:');
 
         const user = await User.findUser(targetId);
-        if (!user || !user.cubes || !user.cubes.length) return reply(`<@!${targetId}> has not set any cubes!`);
+        if (!user || !user.cubes || !user.cubes.length) return message.say(`<@!${targetId}> has not set any cubes!`);
 
         const embed = new Discord.MessageEmbed()
           .setColor(member.roles.highest.color)
