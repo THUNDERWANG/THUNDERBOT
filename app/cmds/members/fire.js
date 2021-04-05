@@ -6,6 +6,7 @@ module.exports = class FireCommand extends Commando.Command {
   constructor(client) {
     super(client, {
       name: 'fire',
+      aliases: ['fired'],
       group: 'members',
       guildOnly: true,
       memberName: 'fire',
