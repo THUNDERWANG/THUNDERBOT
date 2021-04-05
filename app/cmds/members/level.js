@@ -52,7 +52,7 @@ module.exports = class LevelCommand extends Commando.Command {
       if (adverb === 'me' || adverb === 'all') {
         const points = await User.findPoints(userId);
         const { id, next, image } = findLevel(points);
-        const description = next ? `<@!${userId}> is a <@&${id}> with **${points}** points`
+        const description = next ? `<@!${userId}> is a <@&${id}> with **${points || 0}** points`
           : `<@!${userId} is a <@&${id}> at the **max level** with **${points}** points :triumph:`;
         messageEmbed
           .setColor(botColor)
