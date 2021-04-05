@@ -37,7 +37,7 @@ async function fetchCubeMeta(url) {
     cube.url = getFromHTML(dom, 'url');
     cube.thumbnail = getFromHTML(dom, 'image');
     cube.description = getFromHTML(dom, 'description');
-    cube.pack = `https://cubecobra.com/cube/samplepackimage/${cube.id}/161${Math.floor(Math.random() * 9999999999) + 1}.png`;
+    cube.pack = `https://cubecobra.com/cube/samplepackimage/${cube.id}/${Math.floor(Math.random() * 999999)}.png`;
   } else {
     cube.title = rawTitle.slice(rawTitle.indexOf('-') + 1, rawTitle.lastIndexOf('-')).trim();
     cube.url = url;

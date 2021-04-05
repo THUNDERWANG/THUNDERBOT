@@ -5,7 +5,7 @@ const logger = require('@logger/logger.js');
 const fetch = require('node-fetch');
 const { createCanvas, loadImage } = require('canvas');
 const { fetchCubeMeta, validateCubeURL } = require('@helpers/helpers.js');
-const { defaultCooldown, botPrefix, botColor } = require('config').discord;
+const { botPrefix, botColor } = require('config').discord;
 
 const bonusQuestions = [];
 bonusQuestions.push(':thumbsdown: What\'s the last pick? :thumbsdown:');
@@ -27,7 +27,7 @@ module.exports = class P1P1Command extends Commando.Command {
       argsType: 'multiple',
       argsCount: 2,
       examples: [`${botPrefix}p1p1 cc thunderwang`, `${botPrefix}p1p1 ct 123`],
-      throttling: { usages: 1, duration: defaultCooldown },
+      throttling: { usages: 1, duration: 7 },
       args: [
         {
           key: 'domain',
