@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando');
 const Discord = require('discord.js');
 const User = require('@db/models/user.model.js');
 const logger = require('@logger/logger.js');
-const { defaultCooldown, botPrefix, botColor } = require('config').discord;
+const { defaultCooldown, botPrefix } = require('config').discord;
 const { findLevel, levels } = require('@features/levels/levels.js');
 const { makeReplies } = require('@helpers/helpers.js');
 
