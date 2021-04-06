@@ -23,7 +23,7 @@ module.exports = class P1P1Command extends Commando.Command {
       name: 'p1p1',
       group: 'members',
       memberName: 'p1p1',
-      description: 'generate random pack from Cube Cobra/Tutor',
+      description: 'Generate random pack from Cube Cobra/Tutor',
       argsType: 'multiple',
       argsCount: 2,
       examples: [`${botPrefix}p1p1 cc thunderwang`, `${botPrefix}p1p1 ct 123`],

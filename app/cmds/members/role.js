@@ -10,7 +10,7 @@ module.exports = class RoleCommand extends Commando.Command {
       group: 'members',
       memberName: 'role',
       guildOnly: true,
-      description: 'add/remove xmage/cockatrice role',
+      description: 'Add/remove xmage/cockatrice role',
       examples: [`${botPrefix} role add xmage`, `${botPrefix} role remove cockatrice`],
       throttling: { usages: 1, duration: defaultCooldown },
       args: [

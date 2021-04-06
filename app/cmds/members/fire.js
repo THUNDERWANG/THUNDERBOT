@@ -10,7 +10,7 @@ module.exports = class FireCommand extends Commando.Command {
       group: 'members',
       guildOnly: true,
       memberName: 'fire',
-      description: 'announce that a draft has fired',
+      description: 'Announce that a draft has fired',
       throttling: { usages: 1, duration: defaultCooldown },
     });
   }

@@ -7,7 +7,7 @@ module.exports = class DataCommand extends Commando.Command {
       name: 'data',
       group: 'members',
       memberName: 'data',
-      description: 'retrieve the 3-0 data url',
+      description: 'Retrieve the 3-0 data url',
       examples: ['.data'],
       throttling: { usages: 1, duration: 3 },
     });

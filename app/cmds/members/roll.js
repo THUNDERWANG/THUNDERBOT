@@ -9,7 +9,7 @@ module.exports = class RollCommand extends Commando.Command {
       name: 'roll',
       group: 'members',
       memberName: 'roll',
-      description: 'roll up to 10 dice from numbers 1 - 100',
+      description: 'Roll up to 10 dice from numbers 1 - 100',
       argsCount: 1,
       examples: [`${botPrefix}roll d100`, `${botPrefix}roll 3d100`, `${botPrefix} roll 100`],
       throttling: { usages: 1, duration: defaultCooldown },

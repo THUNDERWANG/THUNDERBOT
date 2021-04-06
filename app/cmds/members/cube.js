@@ -14,7 +14,7 @@ module.exports = class CubeCommand extends Commando.Command {
       name: 'cube',
       group: 'members',
       memberName: 'cube',
-      description: 'add, delete, or find cube lists',
+      description: 'Add, delete, or find cube lists',
       argsType: 'multiple',
       argsCount: 2,
       guildOnly: true,
