@@ -89,9 +89,9 @@ module.exports = class LevelCommand extends Commando.Command {
           .setColor(message.guild.members.cache.get(userId).roles.highest.color) // set color
           .setTitle(':muscle: Experience Gain :muscle:')
           .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
+          .setImage('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/1/217dada5-7ffc-488b-8062-34c034906ea9.jpg?1562901203')
           .setDescription(description);
         message.say(messageEmbed);
-        message.say('https://tenor.com/view/bugs-bunny-strong-boxing-showing-off-guns-gif-16048234');
 
       } else if (adverb === 'down') {
         const user = await User.findUser(userId);
