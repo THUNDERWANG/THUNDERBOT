@@ -6,6 +6,7 @@ module.exports = {
     botId: process.env.DEV_DISCORD_BOT_ID,
     botToken: process.env.DEV_DISCORD_BOT_TOKEN,
     serverId: '794675408570023937',
+    rulesChannel: '802301626588201010',
     cubeChatChannel: '802301626588201010',
     mtgaChannelId: '802301626588201010',
     welcomeChannel: '802301626588201010',
