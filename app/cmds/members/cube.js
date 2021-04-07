@@ -1,10 +1,9 @@
 const Commando = require('discord.js-commando');
-const Discord = require('discord.js');
 const Joi = require('joi');
 const User = require('@db/models/user.model.js');
 const logger = require('@logger/logger.js');
 const { defaultCooldown } = require('config').discord;
-const { fetchCubeMeta } = require('@helpers/helpers.js');
+const { fetchCubeMeta, createEmbed } = require('@helpers/helpers.js');
 const { maxSlots } = require('config').database;
 const { makeReplies, validateCubeURL } = require('@helpers/helpers.js');
 
@@ -81,7 +80,7 @@ module.exports = class CubeCommand extends Commando.Command {
         const { cubes } = user;
 
         const question = await message.say(':1234: **Enter a __number__ or __cancel__** :1234:');
-        const embed = new Discord.MessageEmbed()
+        const embed = createEmbed()
           .setTitle(`**${discordTag}'s Cubes**`)
           .setColor(message.guild.members.cache.get(userId).roles.highest.color)
           .setThumbnail(message.author.avatarURL());
@@ -127,7 +126,7 @@ module.exports = class CubeCommand extends Commando.Command {
         const user = await User.findUser(targetId);
         if (!user || !user.cubes || !user.cubes.length) return message.say(`<@!${targetId}> has not set any cubes!`);
 
-        const embed = new Discord.MessageEmbed()
+        const embed = createEmbed()
           .setColor(member.roles.highest.color)
           .setTitle(`${member.user.tag}'s Cubes`)
           .setThumbnail(member.user.avatarURL());

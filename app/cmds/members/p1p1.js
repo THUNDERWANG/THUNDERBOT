@@ -4,8 +4,8 @@ const { JSDOM } = require('jsdom');
 const logger = require('@logger/logger.js');
 const fetch = require('node-fetch');
 const { createCanvas, loadImage } = require('canvas');
-const { fetchCubeMeta, validateCubeURL } = require('@helpers/helpers.js');
-const { botPrefix, botColor } = require('config').discord;
+const { fetchCubeMeta, validateCubeURL, createEmbed } = require('@helpers/helpers.js');
+const { botPrefix, embedColor } = require('config').discord;
 
 const bonusQuestions = [];
 bonusQuestions.push(':thumbsdown: What\'s the last pick? :thumbsdown:');
@@ -49,9 +49,11 @@ module.exports = class P1P1Command extends Commando.Command {
   }
 
   async run(message, { domain, id }) {
-    const color = message.type === 'dm' ? message.member.roles.highest.color : botColor;
-    const messageEmbed = new Discord.MessageEmbed().setColor(color);
+
+    const color = message.type === 'dm' ? message.member.roles.highest.color : embedColor;
+    const messageEmbed = createEmbed().setColor(color);
     let fetching = null;
+
     try {
 
       // I may remove the ct feature altogether
@@ -121,9 +123,7 @@ module.exports = class P1P1Command extends Commando.Command {
             { name: 'Bonus:', value: getBonus() },
           )
           .attachFiles(new Discord.MessageAttachment(pack).setName('pack.png'))
-          .setImage('attachment://pack.png')
-          .setTimestamp()
-          .setFooter('The Grand Calcutron', 'https://cdn.discordapp.com/avatars/801556487038173214/d6e13480f5540fb44ced81b981c66c10.webp?size=256');
+          .setImage('attachment://pack.png');
 
         // .setImage(pack) is the faster way, but discord servers don't seem to honor requests during certain hours
 

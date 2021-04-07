@@ -1,6 +1,8 @@
+const Discord = require('discord.js');
+const { JSDOM } = require('jsdom');
 const Joi = require('joi');
 const fetch = require('node-fetch');
-const { JSDOM } = require('jsdom');
+const { embedColor, embedThumbnail } = require('config').discord;
 
 // ALL MESSAGES SENT SHOULD NOT MENTION ROLES! Pass the no mention object to be sure!
 function makeReplies(message) {
@@ -62,8 +64,17 @@ function rollDie(arg) {
   return new Error('die could not be rolled; not a valid argument');
 }
 
+function createEmbed() {
+  return new Discord.MessageEmbed()
+    .setColor(embedColor)
+    .setFooter('The Grand Calcutron', embedThumbnail)
+    .setThumbnail(embedThumbnail)
+    .setTimestamp();
+}
+
 module.exports.makeReplies = makeReplies;
 module.exports.validateCubeURL = validateCubeURL;
 module.exports.getFromHTML = getFromHTML;
 module.exports.fetchCubeMeta = fetchCubeMeta;
 module.exports.rollDie = rollDie;
+module.exports.createEmbed = createEmbed;

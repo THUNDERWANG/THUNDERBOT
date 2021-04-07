@@ -56,7 +56,7 @@ module.exports = (client) => {
     try {
       const germ = levels[0];
       await member.roles.add(germ.id);
-      const embed = new Discord.MessageEmbed()
+      const embed = createEmbed()
         .setColor('#d6d611')
         .setTitle(`**Welcome, ${member.displayName}!**`)
         .setThumbnail('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/3/e35b8c9b-40d0-4986-9457-ef1263fdfae1.jpg?1562823836')

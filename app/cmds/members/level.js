@@ -1,10 +1,9 @@
 const Commando = require('discord.js-commando');
-const Discord = require('discord.js');
 const User = require('@db/models/user.model.js');
 const logger = require('@logger/logger.js');
 const { defaultCooldown, botPrefix } = require('config').discord;
 const { findLevel, levels } = require('@features/levels/levels.js');
-const { makeReplies } = require('@helpers/helpers.js');
+const { makeReplies, createEmbed } = require('@helpers/helpers.js');
 
 /**
  * ***READ THIS FIRST***
@@ -44,9 +43,7 @@ module.exports = class LevelCommand extends Commando.Command {
   async run(message, { adverb }) {
     const { id: userId, tag: discordTag } = message.author;
     const { replyToAuth } = makeReplies(message);
-    const messageEmbed = new Discord.MessageEmbed()
-      .setFooter('The Grand Calcutron', 'https://cdn.discordapp.com/avatars/801556487038173214/d6e13480f5540fb44ced81b981c66c10.webp?size=256')
-      .setTimestamp();
+    const messageEmbed = createEmbed();
 
     try {
       if (adverb === 'me' || adverb === 'all') {

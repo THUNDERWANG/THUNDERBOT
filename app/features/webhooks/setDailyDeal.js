@@ -36,7 +36,7 @@ module.exports = async (client) => {
       images.sort((a, b) => b.width - a.width);
 
       // send first image
-      const messageEmbed = new Discord.MessageEmbed()
+      const messageEmbed = createEmbed()
         .setColor('#1DA1F2')
         .setAuthor('@ArenaDailyDeal', profilePic, tweetURL)
         .setDescription(comment)
@@ -49,7 +49,7 @@ module.exports = async (client) => {
 
       // send the rest of the images in separate new embed messages
       for (const extraImage of images) {
-        const discordEmbed = new Discord.MessageEmbed()
+        const discordEmbed = createEmbed()
           .setColor('#1DA1F2')
           .setImage(extraImage.url);
         const extraEmbeds = await mtgaDailyDealChannel.send(discordEmbed);
