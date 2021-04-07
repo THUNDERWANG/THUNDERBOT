@@ -48,14 +48,15 @@ module.exports = class LevelCommand extends Commando.Command {
     try {
       if (adverb === 'me' || adverb === 'all') {
         const points = await User.findPoints(userId);
-        const { id, next, image } = findLevel(points);
+        const { id, next, image, footer } = findLevel(points);
         const description = next ? `<@!${userId}> is a <@&${id}> with **${points || 0}** points`
           : `<@!${userId} is a <@&${id}> at the **max level** with **${points}** points :triumph:`;
         messageEmbed
           .setColor(message.guild.members.cache.get(userId).roles.highest.color)
           .setTitle(':ladder: **__Levels__** :ladder:')
           .setImage(image)
-          .setDescription(description);
+          .setDescription(description)
+          .setFooter(footer);
         levels.forEach((level) => {
           messageEmbed.addField(level.name, `${level.points}+ points`, true);
         });
@@ -73,7 +74,8 @@ module.exports = class LevelCommand extends Commando.Command {
             .setTitle(':fire: **__LEVEL UP__** :fire:')
             .setImage(level.image)
             .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
-            .setDescription(`**<@!${message.author.id}> \n <@&${level.id}> \nPoints: __${points}__**`);
+            .setDescription(`**<@!${message.author.id}> \n <@&${level.id}> \nPoints: __${points}__**`)
+            .setFooter(level.footer);
           return await message.say(messageEmbed);
         }
 
@@ -87,7 +89,8 @@ module.exports = class LevelCommand extends Commando.Command {
           .setTitle(':muscle: Experience Gain :muscle:')
           .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
           .setImage('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/1/217dada5-7ffc-488b-8062-34c034906ea9.jpg?1562901203')
-          .setDescription(description);
+          .setDescription(description)
+          .setFooter('"Muscle Burst" by Gary Ruddell');
         await message.say(messageEmbed);
 
       } else if (adverb === 'down') {
