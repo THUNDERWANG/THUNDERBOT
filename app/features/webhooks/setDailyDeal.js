@@ -1,8 +1,8 @@
-const Discord = require('discord.js');
 const { serverId, mtgaChannelId } = require('config').discord;
 const { loadImage } = require('canvas');
 const logger = require('@logger/logger.js');
 const { zapier } = require('config').discord;
+const { createEmbed } = require('@helpers/helpers.js');
 
 /**
  * The message will be sent to a private discord channel with @@@@@ as delimiters. Parse from there.

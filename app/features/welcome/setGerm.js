@@ -1,7 +1,7 @@
-const Discord = require('discord.js');
 const { welcomeChannel, rulesChannel, botId } = require('config').discord;
 const logger = require('@logger/logger.js');
 const { levels } = require('@features/levels/levels.js');
+const { createEmbed } = require('@helpers/helpers.js');
 
 // Welcome Messages
 //   const m1 = 'come for the cube drafts, stay for the bad beats stories.';
