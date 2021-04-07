@@ -7,14 +7,15 @@ statuses.push('UB Reanimator');
 statuses.push('Bant Midrange');
 statuses.push('Orzhov Aggro');
 
-module.exports = (client) => {
-  client.user.setActivity(statuses[Math.floor((Math.random() * statuses.length))]);
-  setInterval(async () => {
-    try {
-      const randomStatus = statuses[Math.floor((Math.random() * statuses.length))];
-      logger.info(`Status changed: ${randomStatus}`);
-    } catch (error) {
-      logger.error(error);
-    }
-  }, 10800000, client);
+module.exports = async function setStatus(client) {
+  try {
+    const randomStatus = statuses[Math.floor((Math.random() * statuses.length))];
+    await client.user.setActivity(randomStatus);
+    logger.info(`Status set: ${randomStatus}`);
+    setTimeout(() => {
+      setStatus(client);
+    }, (10800000));
+  } catch (error) {
+    logger.error(error);
+  }
 };

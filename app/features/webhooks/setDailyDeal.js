@@ -15,7 +15,7 @@ const { zapier } = require('config').discord;
 // would much prefer if zapier sent the message directly to the server, but the service costs money.
 
 module.exports = async (client) => {
-  logger.info('Tracking deals...');
+  logger.info('Listening for deals...');
   client.on('message', async (message) => {
     try {
       if (message.author.id !== zapier && !message.content.toLowerCase().includes('here are')) return;
