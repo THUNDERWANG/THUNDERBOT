@@ -137,8 +137,7 @@ module.exports = class P1P1Command extends Commando.Command {
       }
     } catch (error) {
       if (error.message === 'Could not fetch cube data!') return fetching.edit(error.message);
-      fetching.edit(error.message);
-      logger.error(error);
+      logger.error(error.message);
     }
   }
 };

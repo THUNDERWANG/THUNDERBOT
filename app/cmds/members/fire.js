@@ -5,11 +5,11 @@ const { defaultCooldown } = require('config').discord;
 module.exports = class FireCommand extends Commando.Command {
   constructor(client) {
     super(client, {
-      name: 'fire',
-      aliases: ['fired'],
+      name: 'fired',
+      aliases: ['fire'],
       group: 'members',
       guildOnly: true,
-      memberName: 'fire',
+      memberName: 'fired',
       description: 'Announce that a draft has fired',
       throttling: { usages: 1, duration: defaultCooldown },
     });

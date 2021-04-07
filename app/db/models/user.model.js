@@ -52,7 +52,9 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-User.findUserAndUpdate = (discordId, payload) => User.findOneAndUpdate({ discordId }, payload, { upsert: true, returnOriginal: false, runValidators: true });
+User.findUserAndUpdate = (discordId, payload) => (
+  User.findOneAndUpdate({ discordId }, payload, { upsert: true, returnOriginal: false, runValidators: true })
+);
 
 User.findUser = (discordId) => User.findOne({ discordId });
 

@@ -77,7 +77,7 @@ module.exports = class LevelCommand extends Commando.Command {
             .setImage(level.image)
             .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
             .setDescription(`**<@!${message.author.id}> \n <@&${level.id}> \nPoints: __${points}__**`);
-          return message.say(messageEmbed);
+          return await message.say(messageEmbed);
         }
 
         let description = `<@!${userId}> now has __${points}__ points!\n`;
@@ -91,7 +91,7 @@ module.exports = class LevelCommand extends Commando.Command {
           .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
           .setImage('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/1/217dada5-7ffc-488b-8062-34c034906ea9.jpg?1562901203')
           .setDescription(description);
-        message.say(messageEmbed);
+        await message.say(messageEmbed);
 
       } else if (adverb === 'down') {
         const user = await User.findUser(userId);
@@ -103,7 +103,7 @@ module.exports = class LevelCommand extends Commando.Command {
         user.points--;
         await user.save();
 
-        return replyToAuth(`now has **${user.points}** points`);
+        return await replyToAuth(`now has **${user.points}** points`);
       }
     } catch (error) {
       message.say('Something went wrong!');

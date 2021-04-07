@@ -17,7 +17,7 @@ module.exports = class DataCommand extends Commando.Command {
     try {
       await message.say(':microscope: http://data.cube.pizza :microscope:');
     } catch (error) {
-      message.say('Something went wrong!');
+      message.say(error.message);
       logger.error(error);
     }
   }

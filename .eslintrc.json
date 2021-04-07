@@ -11,7 +11,7 @@
 	"rules": {
 		"linebreak-style": ["off", "windows"],
 		"class-methods-use-this": ["off"],
-		"max-len": ["warn", 160],
+		"max-len": ["warn", 150],
 		"import/no-unresolved": ["off"],
 		"consistent-return": ["off"],
 		"object-curly-newline": ["off"],

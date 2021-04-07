@@ -29,11 +29,10 @@ module.exports = class PurgeCommand extends Commando.Command {
 
   async run(message, { amount }) {
     try {
-      if (amount <= 0 || amount > 20) return message.reply('int must be between 1 - 20');
+      if (amount <= 0 || amount > 20) return await message.reply('int must be between 1 - 20');
       await message.channel.bulkDelete(amount + 1);
     } catch (error) {
       message.say(error.message);
-      if (error.message === 'Missing Permissions') logger.error(message.author.tag);
       if (!error.message.match(/14 days old/i)) logger.error(error.message);
     }
   }

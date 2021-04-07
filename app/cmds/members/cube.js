@@ -151,7 +151,7 @@ module.exports = class CubeCommand extends Commando.Command {
       }
     } catch (error) {
       // when the collector times out, it throws a Discord Collection that extends Map with size 0
-      if (error.size === 0) return replyToAuth('\'s connection has timed out. Please start over.');
+      if (error.size === 0) return replyToAuth('\'s connection timed out. Please start over.');
       if (error.message.contains('valid domain')) return message.say(error.message);
       message.say('Something went wrong!');
       logger.error(error);
