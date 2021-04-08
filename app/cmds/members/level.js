@@ -56,6 +56,7 @@ module.exports = class LevelCommand extends Commando.Command {
           .setTitle(':ladder: **__Levels__** :ladder:')
           .setImage(image)
           .setDescription(description)
+          .setTimestamp(null)
           .setFooter(footer);
         levels.forEach((level) => {
           messageEmbed.addField(level.name, `${level.points}+ points`, true);
@@ -75,6 +76,7 @@ module.exports = class LevelCommand extends Commando.Command {
             .setImage(level.image)
             .setThumbnail(`${message.guild.members.cache.get(userId).user.avatarURL()}?size=small`)
             .setDescription(`**<@!${message.author.id}> has been polymorphed to a <@&${level.id}> with __${points}__ points!**`)
+            .setTimestamp(null)
             .setFooter(level.footer);
           return await message.say(messageEmbed);
         }
@@ -90,6 +92,7 @@ module.exports = class LevelCommand extends Commando.Command {
           .setThumbnail(`${message.guild.members.cache.get(userId).user.avatarURL()}?size=small`)
           .setImage('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/1/217dada5-7ffc-488b-8062-34c034906ea9.jpg?1562901203')
           .setDescription(description)
+          .setTimestamp(null)
           .setFooter('"Muscle Burst" by Gary Ruddell');
         await message.say(messageEmbed);
 

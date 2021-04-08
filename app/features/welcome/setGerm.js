@@ -54,15 +54,16 @@ const { createEmbed } = require('@helpers/helpers.js');
 module.exports = (client) => {
   client.on('guildMemberAdd', async (member) => {
     try {
+
       const germ = levels[0];
       await member.roles.add(germ.id);
       const embed = createEmbed()
         .setColor('#d6d611')
         .setTitle(`**Welcome, ${member.displayName}!**`)
         .setThumbnail('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/3/e35b8c9b-40d0-4986-9457-ef1263fdfae1.jpg?1562823836')
-        .setDescription(`**<@!${botId}> polymorphed <@!${member.id}> into a <@&${germ.id}> <:germ:585926679151771658>** Squirm your way to <#${rulesChannel}> to get started!`)
-        .setFooter('The Grand Calcutron', 'https://cdn.discordapp.com/avatars/801556487038173214/d6e13480f5540fb44ced81b981c66c10.webp?size=256')
-        .setTimestamp();
+        .setDescription(`**<@!${botId}> polymorphed ${member.user.tag} into a <@&${germ.id}> <:germ:585926679151771658>** Squirm your way to <#${rulesChannel}> to get started!`)
+        .setFooter('"Polymorph" by Robert Bliss')
+        .setTimestamp(null);
       const channel = member.guild.channels.cache.get(welcomeChannel);
       channel.send(embed);
     } catch (error) {
