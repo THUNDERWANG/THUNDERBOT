@@ -1,36 +1,42 @@
-// const Commando = require('discord.js-commando');
-// const logger = require('@logger/logger.js');
-// const { triceRole, xmageRole, draftPlanningChannel } = require('config').discord;
+const Commando = require('discord.js-commando');
+const logger = require('@logger/logger.js');
+const { triceRole, xmageRole, draftPlanningChannel, ownerId } = require('config').discord;
 
-// module.exports = class DrafterCommand extends Commando.Command {
-//   constructor(client) {
-//     super(client, {
-//       name: 'assemble the legion!',
-//       group: 'members',
-//       patterns: [/^<@&/i, /^@xmage/i, /^@trice/i, /^@cock/i, /^@cockatrice/i],
-//       guildOnly: true,
-//       argsCount: 1,
-//       argsType: 'single',
-//       memberName: 'assemble',
-//       description: 'Type in @xmage or @cockatrice.',
-//       throttling: { usages: 1, duration: 600 },
-//     });
-//   }
+module.exports = class DrafterCommand extends Commando.Command {
+  constructor(client) {
+    super(client, {
+      name: 'assemble the legion!',
+      group: 'members',
+      patterns: [/^(@xmage)|(\s+)@xmage/i, /^(@cockatrice)|(\s+)@cockatrice/i, /^(@trice)|(\s+)@trice/i],
+      guildOnly: true,
+      argsCount: 1,
+      argsType: 'single',
+      memberName: 'assemble',
+      description: 'Type in @xmage or @cockatrice in the appropriate channel.',
+      throttling: { usages: 1, duration: 600 },
+    });
+  }
 
-//   async run(message) {
-//     const content = message.content.trim().toLowerCase().split(' ')[0];
-//     try {
-//       if (message.channel.id === draftPlanningChannel) {
-//         if (content === `<@&${xmageRole}>` || content === '@xmage') {
-//           await message.say(`**<@&${xmageRole}> Assemble!**`);
+  onBlock(message, reason, data) {
+    if (reason === 'throttling') {
+      const minutes = Math.floor(data.remaining / 60);
+      const seconds = Math.floor(data.remaining % 60);
+      message.say(`<@!${message.author.id}> must wait ${minutes} minutes and ${seconds} seconds to mention again!`);
+    }
+  }
 
-//         } else if (content === `<@&${triceRole}` || content === '@trice' || content === '@cockatrice' || message.content === '@cock') {
-//           await message.say(`**<@&${triceRole}> Assemble!**`);
-//         }
-//       }
-//     } catch (error) {
-//       message.say('Something went wrong!');
-//       logger.error(error);
-//     }
-//   }
-// };
+  async run(message) {
+    const content = message.content.toLowerCase();
+    try {
+      // admins will always be able to @roles still
+      if (message.author.id === ownerId) return;
+      if (message.channel.id === draftPlanningChannel) {
+        if (content.includes('xmage')) return await message.say(`**<@&${xmageRole}> Assemble!**`);
+        if (content.includes('trice') || content.includes('cockatrice')) return await message.say(`**<@&${triceRole}> Assemble!**`);
+      }
+    } catch (error) {
+      message.say('Something went wrong!');
+      logger.error(error);
+    }
+  }
+};
