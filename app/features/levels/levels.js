@@ -33,7 +33,7 @@ const levelsDevelopment = [
     id: '795443197126901810',
     image: 'https://c1.scryfall.com/file/scryfall-cards/art_crop/front/6/a/6ac609aa-49d1-4330-b718-a90b0560da52.jpg?1592709988',
     points: 15,
-    footer: '"Angel" by Illustrated by Magali Villeneuve',
+    footer: '"Angel" by Magali Villeneuve',
   },
   {
     name: '5/5 Demon',
@@ -87,7 +87,7 @@ const levelsProduction = [
     id: '585564850235768844',
     image: 'https://c1.scryfall.com/file/scryfall-cards/art_crop/front/6/a/6ac609aa-49d1-4330-b718-a90b0560da52.jpg?1592709988',
     points: 15,
-    footer: '"Angel" by Illustrated by Magali Villeneuve',
+    footer: '"Angel" by Magali Villeneuve',
   },
   {
     name: '5/5 Demon',

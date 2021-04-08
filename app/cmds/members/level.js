@@ -50,7 +50,7 @@ module.exports = class LevelCommand extends Commando.Command {
         const points = await User.findPoints(userId);
         const { id, next, image, footer } = findLevel(points);
         const description = next ? `<@!${userId}> is a <@&${id}> with **${points || 0}** points`
-          : `<@!${userId} is a <@&${id}> at the **max level** with **${points}** points :triumph:`;
+          : `<@!${userId}> is a <@&${id}> at the **max level** with **${points}** points :triumph:`;
         messageEmbed
           .setColor(message.guild.members.cache.get(userId).roles.highest.color)
           .setTitle(':ladder: **__Levels__** :ladder:')
@@ -71,10 +71,10 @@ module.exports = class LevelCommand extends Commando.Command {
           const nextColor = message.guild.roles.cache.get(level.id).color;
           messageEmbed
             .setColor(nextColor)
-            .setTitle(':fire: **__LEVEL UP__** :fire:')
+            .setTitle(':fire: **LEVEL UP** :fire:')
             .setImage(level.image)
-            .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
-            .setDescription(`**<@!${message.author.id}> \n <@&${level.id}> \nPoints: __${points}__**`)
+            .setThumbnail(`${message.guild.members.cache.get(userId).user.avatarURL()}?size=small`)
+            .setDescription(`**<@!${message.author.id}> has been polymorphed to a <@&${level.id}> with __${points}__ points!**`)
             .setFooter(level.footer);
           return await message.say(messageEmbed);
         }
@@ -82,12 +82,12 @@ module.exports = class LevelCommand extends Commando.Command {
         let description = `<@!${userId}> now has __${points}__ points!\n`;
         description = !level.next
           ? `**${description}:triumph: YOU ARE AT THE FINAL LEVEL :triumph:**`
-          : `**${description}__${level.next.points - points}__ more to <@&${level.next.id}>**`;
+          : `**${description}__ ${level.next.points - points}__ more to <@&${level.next.id}>!**`;
 
         messageEmbed
           .setColor(message.guild.members.cache.get(userId).roles.highest.color) // set color
           .setTitle(':muscle: Experience Gain :muscle:')
-          .setThumbnail(message.guild.members.cache.get(userId).user.avatarURL())
+          .setThumbnail(`${message.guild.members.cache.get(userId).user.avatarURL()}?size=small`)
           .setImage('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/1/217dada5-7ffc-488b-8062-34c034906ea9.jpg?1562901203')
           .setDescription(description)
           .setFooter('"Muscle Burst" by Gary Ruddell');
