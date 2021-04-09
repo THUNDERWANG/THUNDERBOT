@@ -50,6 +50,7 @@ module.exports = async (client) => {
       // send the rest of the images in separate new embed messages
       for (const extraImage of images) {
         const discordEmbed = createEmbed()
+          .setThumbnail(null)
           .setColor('#1DA1F2')
           .setImage(extraImage.url);
         const extraEmbeds = await mtgaDailyDealChannel.send(discordEmbed);
