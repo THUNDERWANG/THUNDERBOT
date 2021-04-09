@@ -19,7 +19,7 @@ client.on('ready', () => {
     useCreateIndex: true,
     useFindAndModify: false,
   })
-    .then(logger.info('The database is ready!'))
+    .then(logger.info('Database is ready!'))
     .catch(logger.error);
 });
 
