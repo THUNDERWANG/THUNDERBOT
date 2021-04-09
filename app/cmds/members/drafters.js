@@ -34,7 +34,7 @@ module.exports = class DrafterCommand extends Commando.Command {
     if (reason === 'throttling') {
       const minutes = Math.floor(data.remaining / 60);
       const seconds = Math.round(data.remaining % 60);
-      message.say(`<@!${message.author.id}> must wait ${minutes} minutes and ${seconds} seconds to mention again!`);
+      message.say(`<@!${message.author.id}> must wait **${minutes} minutes and ${seconds} seconds** to call again!`);
     }
   }
 
@@ -43,8 +43,14 @@ module.exports = class DrafterCommand extends Commando.Command {
     try {
       // admins will always be able to @roles
       if (message.author.id === ownerId) return;
-      if (content.includes('xmage') || role === 'xmage') return await message.say(`**<@&${xmageRole}> Assemble!**`);
-      if (content.includes('trice') || content.includes('cockatrice') || role === 'cockatrice') await message.say(`**<@&${triceRole}> Assemble!**`);
+      if (content.includes('xmage') || role === 'xmage') {
+        return await message.say(`**<@!${message.author.id}> calls for <@&${xmageRole}> to assemble!**`);
+      }
+
+      if (content.includes('trice') || content.includes('cockatrice') || role === 'cockatrice') {
+        return await message.say(`<@!${message.author.id}> calls for <@&${triceRole}> to assemble!`);
+      }
+
     } catch (error) {
       message.say('Something went wrong!');
       logger.error(error);
