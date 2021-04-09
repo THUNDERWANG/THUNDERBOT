@@ -102,8 +102,8 @@ module.exports = class CubeCommand extends Commando.Command {
 
         const collectorNo = await message.channel.awaitMessages(filterNo, { max: 1, time: 10000, dispose: true, maxProcessed: 3, errors: ['time'] });
         let inputChoice = collectorNo.last().content.toLowerCase();
-        if (inputChoice === 'cancel') return replyToAuth('has cancelled :x:');
-        if (inputChoice.startsWith('.cube')) return question.delete(); // user opens another menu on accident
+        if (inputChoice === 'cancel') return await replyToAuth('has cancelled :x:');
+        if (inputChoice.startsWith('.cube')) return await question.delete(); // user opens another menu on accident
 
         // delete cube from database
         const selectedCube = cubes[--inputChoice];
@@ -112,7 +112,12 @@ module.exports = class CubeCommand extends Commando.Command {
         await replyToAuth(`has deleted **${selectedCube.name}** :put_litter_in_its_place:`);
 
       } else if (verb === 'refresh') {
-        // TODO: implement refresh all lists
+        const user = await User.findUser(userId);
+        if (!user || !user.cubes || !user.cubes.length) return await message.say(`<@!${userId}> has not set any cubes!`);
+        const freshCubeMeta = await Promise.all(user.cubes.map((cube) => fetchCubeMeta(cube.link)));
+        const freshCubes = freshCubeMeta.map((cube) => ({ name: cube.title, link: cube.url }));
+        await User.findUserAndUpdate(userId, { $set: { cubes: freshCubes } });
+        return await replyToAuth('has refreshed their cubes! :recycle:');
 
         // cube look up
         // search by mention (parsed as <@!986623452123> or <@986623452123>)
@@ -121,7 +126,7 @@ module.exports = class CubeCommand extends Commando.Command {
         const targetId = (verb.startsWith('<@!')) ? verb.slice(3, -1) : verb.slice(2, -1);
 
         const member = message.guild.members.cache.get(targetId);
-        if (!member) return message.say('The member could not be found in guild! :thinking:');
+        if (!member) return await message.say('The member could not be found in guild! :thinking:');
 
         const user = await User.findUser(targetId);
         if (!user || !user.cubes || !user.cubes.length) return message.say(`<@!${targetId}> has not set any cubes!`);
@@ -131,7 +136,7 @@ module.exports = class CubeCommand extends Commando.Command {
           .setTitle(`${member.user.tag}'s Cubes`)
           .setThumbnail(member.user.avatarURL());
         user.cubes.forEach((cube, index) => { if (cube) embed.addFields({ name: `${index + 1}. ${cube.name}`, value: cube.link }); });
-        message.say(embed);
+        await message.say(embed);
 
         // search by `@THUNDERWANG#1234`
       } else if (verb.startsWith('`')) {
@@ -139,7 +144,7 @@ module.exports = class CubeCommand extends Commando.Command {
         let markDownText = content.slice(content.indexOf('`') + 1, content.lastIndexOf('`')).trim().toLowerCase();
         if (markDownText.startsWith('@')) markDownText = markDownText.slice(1);
         const member = message.guild.members.cache.find((mem) => (mem.user.tag.toLowerCase() === markDownText));
-        return member ? this.run(message, { verb: `<@!${member.id}>` }) : message.say('Member could not be found!');
+        return member ? this.run(message, { verb: `<@!${member.id}>` }) : await message.say('Member could not be found!');
 
       } else if (verb === 'me') {
         this.run(message, { verb: `<@!${userId}>` });
@@ -151,8 +156,8 @@ module.exports = class CubeCommand extends Commando.Command {
     } catch (error) {
       // when the collector times out, it throws a Discord Collection that extends Map with size 0
       if (error.size === 0) return replyToAuth('\'s connection timed out. Please start over.');
-      if (error.message.contains('valid domain')) return message.say(error.message);
-      message.say('Something went wrong!');
+      if (error.message.includes('valid domain')) return message.say(error.message);
+      await message.say('Something went wrong!');
       logger.error(error);
     }
   }
