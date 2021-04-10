@@ -2,7 +2,7 @@ const Commando = require('discord.js-commando');
 const User = require('@db/models/user.model.js');
 const logger = require('@logger/logger.js');
 const { defaultCooldown, botPrefix } = require('config').discord;
-const { findLevel, levels } = require('@features/levels/levels.js');
+const { findLevel, levels, muscleImage } = require('@features/levels/levels.js');
 const { makeReplies, createEmbed } = require('@helpers/helpers.js');
 
 /**
@@ -75,13 +75,13 @@ module.exports = class LevelCommand extends Commando.Command {
             .setTitle(':fire: **LEVEL UP** :fire:')
             .setImage(level.image)
             .setThumbnail(`${message.guild.members.cache.get(userId).user.avatarURL()}?size=small`)
-            .setDescription(`**<@!${message.author.id}> has been polymorphed to a <@&${level.id}> with __${points}__ points!**`)
+            .setDescription(`**<@!${message.author.id}> leveled up to <@&${level.id}> with __${points}__ points!**`)
             .setTimestamp(null)
             .setFooter(level.footer);
           return await message.say(messageEmbed);
         }
 
-        let description = `<@!${userId}> now has __${points}__ points!\n`;
+        let description = `<@!${userId}> now has __${points}__ points! `;
         description = !level.next
           ? `**${description}:triumph: YOU ARE AT THE FINAL LEVEL :triumph:**`
           : `**${description}__ ${level.next.points - points}__ more to <@&${level.next.id}>!**`;
@@ -90,7 +90,7 @@ module.exports = class LevelCommand extends Commando.Command {
           .setColor(message.guild.members.cache.get(userId).roles.highest.color) // set color
           .setTitle(':muscle: Experience Gain :muscle:')
           .setThumbnail(`${message.guild.members.cache.get(userId).user.avatarURL()}?size=small`)
-          .setImage('https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/1/217dada5-7ffc-488b-8062-34c034906ea9.jpg?1562901203')
+          .setImage(muscleImage)
           .setDescription(description)
           .setTimestamp(null)
           .setFooter('"Muscle Burst" by Gary Ruddell');
