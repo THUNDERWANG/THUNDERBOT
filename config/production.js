@@ -10,6 +10,7 @@ module.exports = {
     cubeChatChannel: '306902973706141708',
     mtgaChannelId: '801525594520682536',
     welcomeChannel: '659117988405837832',
+    offTopicChannel: '396766163562004490',
     draftPlanningChannel: '711144179694043146',
     modRole: '313744722654920708',
     xmageRole: '585313738169778177',
