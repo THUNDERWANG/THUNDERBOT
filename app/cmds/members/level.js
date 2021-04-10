@@ -57,6 +57,7 @@ module.exports = class LevelCommand extends Commando.Command {
           .setImage(image)
           .setDescription(description)
           .setTimestamp(null)
+          .setThumbnail(null)
           .setFooter(footer);
         levels.forEach((level) => {
           messageEmbed.addField(level.name, `${level.points}+ points`, true);
