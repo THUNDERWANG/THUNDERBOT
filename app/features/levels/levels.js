@@ -29,7 +29,7 @@ const levelsDevelopment = [
     id: '795222316614418462',
     image: zombieImage,
     points: 5,
-    footer: '"Zombie" by Dave Kendall',
+    footer: '"Zombie" by Tomasz Jedruszek',
   },
   {
     name: '3/3 Beast',
@@ -82,7 +82,7 @@ const levelsProduction = [
     id: '585564507670052933', // 2/2 Zombie
     image: zombieImage,
     points: 5,
-    footer: '"Zombie" by Dave Kendall',
+    footer: '"Zombie" by Tomasz Jedruszek',
 
   },
   {
