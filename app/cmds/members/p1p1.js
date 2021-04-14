@@ -110,6 +110,7 @@ module.exports = class P1P1Command extends Commando.Command {
 
         fetching = await message.say('**Generating pack...**');
         const meta = await fetchCubeMeta(id);
+        if (!meta) return await fetching.edit('**Could not fetch cube data!**');
         const { title, url, description, thumbnail, pack } = meta;
         messageEmbed
           .setAuthor('Cube Cobra', 'http://cubecobra.com/content/sticker.png', url)
@@ -136,7 +137,6 @@ module.exports = class P1P1Command extends Commando.Command {
         this.run(message, { domain: 'cc', id: domain });
       }
     } catch (error) {
-      if (error.message === 'Could not fetch cube data!') return fetching.edit(error.message);
       logger.error(error.message);
     }
   }

@@ -68,7 +68,7 @@ module.exports = class CubeCommand extends Commando.Command {
         // check if input is url or cube cobra id
         const validation = validateCubeURL(url);
         const cubeMeta = validation ? await fetchCubeMeta(url) : await fetchCubeMeta(`https://cubecobra.com/cube/overview/${url}`);
-
+        if (!cubeMeta) return await message.say('Could not fetch cube!');
         cubes.push({ name: cubeMeta.title, link: cubeMeta.url });
         await user.save();
         return await replyToAuth(`has added **${cubeMeta.title}** :white_check_mark:`);
@@ -115,7 +115,8 @@ module.exports = class CubeCommand extends Commando.Command {
         const user = await User.findUser(userId);
         if (!user || !user.cubes || !user.cubes.length) return await message.say(`<@!${userId}> has not set any cubes!`);
         const freshCubeMeta = await Promise.all(user.cubes.map((cube) => fetchCubeMeta(cube.link)));
-        const freshCubes = freshCubeMeta.map((cube) => ({ name: cube.title, link: cube.url }));
+        const cleanedCubes = freshCubeMeta.filter((cube) => cube !== null); // remove cubes that may have been deleted
+        const freshCubes = cleanedCubes.map((cube) => ({ name: cube.title, link: cube.url }));
         await User.findUserAndUpdate(userId, { $set: { cubes: freshCubes } });
         return await replyToAuth('has refreshed their cubes! :recycle:');
 
@@ -156,7 +157,7 @@ module.exports = class CubeCommand extends Commando.Command {
     } catch (error) {
       // when the collector times out, it throws a Discord Collection that extends Map with size 0
       if (error.size === 0) return replyToAuth('\'s connection timed out. Please start over.');
-      if (error.message.includes('valid domain')) return message.say(error.message);
+      // if (error.message.includes('valid domain')) return message.say(error.message);
       await message.say('Something went wrong!');
       logger.error(error);
     }

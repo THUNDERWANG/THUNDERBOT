@@ -24,28 +24,28 @@ function getFromHTML(dom, item) {
 }
 
 async function fetchCubeMeta(url) {
-  if (!validateCubeURL(url)) throw new Error('Not a valid domain');
+  if (!validateCubeURL(url)) throw new Error('Not a valid cube domain');
   const { hostname } = new URL(url);
   const res = await fetch(url);
-  const html = await res.text();
-  const dom = new JSDOM(html);
-  const rawTitle = getFromHTML(dom, 'title');
-  if (!rawTitle || rawTitle === 'Cube Cobra Overview: Cube Not Found') throw new Error('Could not find cube!');
   const cube = {};
   if (hostname === 'cubecobra.com') {
-    // TODO: Find a more robust method to parse URLS
-    cube.id = url.endsWith('/') ? url.slice(0, -1) : url.slice(url.lastIndexOf('/') + 1);
+    if (res.url !== url) return null;
+    const html = await res.text();
+    const dom = new JSDOM(html);
+    const rawTitle = getFromHTML(dom, 'title');
     cube.title = rawTitle.slice(rawTitle.indexOf(':') + 1).trim();
+    cube.id = url.endsWith('/') ? url.slice(0, -1) : url.slice(url.lastIndexOf('/') + 1);
     cube.url = getFromHTML(dom, 'url');
     cube.thumbnail = getFromHTML(dom, 'image');
     cube.description = getFromHTML(dom, 'description');
     cube.pack = `https://cubecobra.com/cube/samplepackimage/${cube.id}/${Math.floor(Math.random() * 999999)}.png`;
   } else {
+    const html = await res.text();
+    const dom = new JSDOM(html);
+    const rawTitle = getFromHTML(dom, 'title');
     cube.title = rawTitle.slice(rawTitle.indexOf('-') + 1, rawTitle.lastIndexOf('-')).trim();
     cube.url = url;
   }
-  // taking an all or nothing approach here to ensure integrity
-  if (Object.values(cube).includes(null)) throw Error('Could not fetch complete meta data!');
   return cube;
 }
 
