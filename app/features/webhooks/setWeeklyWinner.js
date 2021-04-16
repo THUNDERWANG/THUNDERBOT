@@ -3,7 +3,7 @@ const logger = require('@logger/logger.js');
 const { zapier } = require('config').discord;
 
 // TODO: Refactor so text is filtered by message.embeds
-module.exports = async (client) => {
+module.exports = (client) => {
   logger.info('Listening for Weekly Winners...');
   client.on('message', async (message) => {
     try {

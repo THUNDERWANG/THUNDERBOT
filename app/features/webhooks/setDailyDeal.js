@@ -14,7 +14,7 @@ const { createEmbed } = require('@helpers/helpers.js');
 
 // would much prefer if zapier sent the message directly to the server, but the service costs money.
 // TODO: refactor to use message.embeds
-module.exports = async (client) => {
+module.exports = (client) => {
   logger.info('Listening for deals...');
   client.on('message', async (message) => {
     try {
