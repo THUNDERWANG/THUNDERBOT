@@ -12,9 +12,11 @@ module.exports = {
     welcomeChannel: '659117988405837832',
     offTopicChannel: '396766163562004490',
     draftPlanningChannel: '711144179694043146',
+    reactChannel: '832700085652553769',
     modRole: '313744722654920708',
     xmageRole: '585313738169778177',
     triceRole: '585314755976364043',
+    draftingRolesMessage: '832735558916243516',
   },
   database: {
     url: process.env.MONGO_URL,
