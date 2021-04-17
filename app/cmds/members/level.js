@@ -84,7 +84,7 @@ module.exports = class LevelCommand extends Commando.Command {
 
         let description = `<@!${userId}> now has __${points}__ points! `;
         description = !level.next
-          ? `**${description}:triumph: YOU ARE AT THE FINAL LEVEL :triumph:**`
+          ? `**${description}You are at the __max level__!**`
           : `**${description}__ ${level.next.points - points}__ more to <@&${level.next.id}>!**`;
 
         messageEmbed
