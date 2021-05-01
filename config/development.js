@@ -11,7 +11,7 @@ module.exports = {
     mtgaChannelId: '802301626588201010',
     welcomeChannel: '802301626588201010',
     offTopicChannel: '802301626588201010',
-    draftPlanningChannel: '832699885387907114',
+    draftPlanningChannel: '802301626588201010',
     reactChannel: '832699885387907114',
     modRole: '795506335721717760',
     xmageRole: '796164518115541012',
