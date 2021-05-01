@@ -41,15 +41,13 @@ module.exports = class DrafterCommand extends Commando.Command {
   async run(message, { role }) {
     const content = message.content.toLowerCase();
     try {
+      let xmagers = '';
+      let tricers = '';
       // admins will always be able to @roles
       if (message.author.id === ownerId) return;
-      if (content.includes('xmage') || role === 'xmage') {
-        return await message.say(`**<@!${message.author.id}> calls for <@&${xmageRole}> to assemble!**`);
-      }
-
-      if (content.includes('trice') || content.includes('cockatrice') || role === 'cockatrice') {
-        return await message.say(`<@!${message.author.id}> calls for <@&${triceRole}> to assemble!`);
-      }
+      if (content.includes('@xmage') || role === 'xmage') xmagers = `<@&${xmageRole}>`;
+      if (content.includes('@trice') || content.includes('@cockatrice') || role === 'cockatrice') tricers = `<@&${triceRole}>`;
+      return await message.say(`**<@!${message.author.id}> calls for ${tricers} ${xmagers} to assemble!**`);
 
     } catch (error) {
       message.say('Something went wrong!');
