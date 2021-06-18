@@ -9,4 +9,13 @@ module.exports = {
     defaultCooldown: 3, // in seconds
     zapier: '802369375432736788',
   },
+  sheets: {
+    email: process.env.GOOGLE_CLIENT_EMAIL,
+    keyFile: null,
+    privateKey: process.env.GOOGLE_PRIVATE_KEY,
+    scopes: 'https://www.googleapis.com/auth/spreadsheets',
+    version: 'v4',
+    spreadsheetId: process.env.SPREADSHEET_ID,
+    sheetName: process.env.SHEET_NAME,
+  },
 };
