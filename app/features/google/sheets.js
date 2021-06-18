@@ -39,6 +39,7 @@ function updateAll(payload) {
 // gets user data from db and updates google sheets
 // TODO: just search and update what needs to be updated in the future
 async function clearUpdate() {
+  logger.info('Sheets interval set!');
   setInterval(async () => {
     try {
       await clearAll({ spreadsheetId, sheetName });
