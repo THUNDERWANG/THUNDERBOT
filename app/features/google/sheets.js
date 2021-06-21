@@ -11,7 +11,7 @@ function clearAll({ sheetsAPI, spreadsheetId, sheetName }) {
 }
 
 // payload = 2D array [['thunder', 5, 10], ['appleboy', 1, 6]]
-function updateAll(sheetsAPI, payload) {
+function updateAll(sheetsAPI, payload, spreadsheetId, sheetName) {
   const options = {
     spreadsheetId,
     range: `${sheetName}!A2:Z`,
