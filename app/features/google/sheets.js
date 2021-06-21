@@ -5,24 +5,13 @@ const { email, keyFile, privateKey, scopes, version, spreadsheetId, sheetName } 
 
 const googleClient = new google.auth.JWT(email, keyFile, privateKey, scopes);
 
-let sheetsAPI = '';
-
-googleClient.authorize()
-  .then((tokens) => {
-    logger.info('Google client connected!');
-    sheetsAPI = google.sheets({ version, auth: googleClient });
-  })
-  .catch((error) => logger.error(error));
-
-function clearAll({ spreadsheetId, sheetName }) {
-  if (!sheetsAPI) return logger.error('Sheets not connected!');
+function clearAll({ sheetsAPI, spreadsheetId, sheetName }) {
   const options = { spreadsheetId, range: `${sheetName}!A2:Z` };
   return sheetsAPI.spreadsheets.values.clear(options);
 }
 
 // payload = 2D array [['thunder', 5, 10], ['appleboy', 1, 6]]
-function updateAll(payload) {
-  if (!sheetsAPI) return logger.error('Sheets not connected!');
+function updateAll(sheetsAPI, payload) {
   const options = {
     spreadsheetId,
     range: `${sheetName}!A2:Z`,
@@ -38,13 +27,13 @@ function updateAll(payload) {
 
 // gets user data from db and updates google sheets
 // TODO: just search and update what needs to be updated in the future
-async function clearUpdate() {
+async function setSheets() {
   logger.info('Sheets interval set!');
   setInterval(async () => {
-    try {
-      await clearAll({ spreadsheetId, sheetName });
-      const users = await User.find({});
 
+    try {
+      // load all users
+      const users = await User.find({});
       const payload = users.map(({ discordTag, discordId, points, cubes }) => {
         const row = [discordTag, discordId, points];
         const cubeLists = cubes.reduce((acc, cube) => `${acc} ${cube.link}`, '');
@@ -52,12 +41,16 @@ async function clearUpdate() {
         return row;
       });
 
-      await updateAll(payload);
+      await googleClient.authorize(); // returns tokens if needed
+      const sheetsAPI = google.sheets({ version, auth: googleClient });
+      await clearAll({ sheetsAPI, spreadsheetId, sheetName });
+      await updateAll(sheetsAPI, payload);
       logger.info('Sheets updated!');
+
     } catch (error) {
       logger.error(error);
     }
-  }, 43200000);
+  }, 21600000);
 }
 
-module.exports.setSheets = clearUpdate;
+module.exports.setSheets = setSheets;
