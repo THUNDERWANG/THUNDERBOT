@@ -56,7 +56,7 @@ module.exports = class CubeCommand extends Commando.Command {
         // if no url or id provided, open up collector and listen for one
         let inputURL = '';
         if (!url) {
-          const question = await message.say(':link: **Enter a __cube URL__ or __Cube Cobra ID__ or __cancel__ or to cancel** :link:');
+          const question = await message.say(':link: **Enter a __cube URL__ or __Cube Cobra ID__ or type __cancel__** :link:');
           const filterURL = (input) => input.author.id === message.author.id;
           const collectorURL = await message.channel.awaitMessages(filterURL, { max: 1, dispose: true, time: 45000, errors: ['time'] });
           inputURL = collectorURL.last().content.toLowerCase();
@@ -79,7 +79,7 @@ module.exports = class CubeCommand extends Commando.Command {
         if (!user || !user.cubes || !user.cubes.length) return await message.say(`<@!${userId}> has not set any cubes!`);
         const { cubes } = user;
 
-        const question = await message.say(':1234: **Enter a __number__ or __cancel__** :1234:');
+        const question = await message.say(':1234: **Enter a __number__ or type __cancel__** :1234:');
         const embed = createEmbed()
           .setTitle(`**${discordTag}'s Cubes**`)
           .setColor(message.guild.members.cache.get(userId).roles.highest.color)
