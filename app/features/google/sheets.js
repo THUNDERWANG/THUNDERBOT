@@ -44,7 +44,7 @@ async function setSheets() {
       await googleClient.authorize(); // returns tokens if needed
       const sheetsAPI = google.sheets({ version, auth: googleClient });
       await clearAll({ sheetsAPI, spreadsheetId, sheetName });
-      await updateAll(sheetsAPI, payload);
+      await updateAll(sheetsAPI, payload, spreadsheetId, sheetName);
       logger.info('Sheets updated!');
 
     } catch (error) {
